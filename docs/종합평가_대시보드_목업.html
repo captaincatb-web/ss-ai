@@ -231,7 +231,7 @@ table.t{width:100%;border-collapse:collapse;font-size:12.5px}
 .t tbody tr.click:hover,.t tbody tr.click:focus-visible{background:var(--surface-2)}
 .t tbody tr[aria-selected="true"]{background:var(--chip-blue)}
 .t tfoot td{font-weight:700;border-bottom:none}
-.t .sub2{display:block;font-size:11px;color:var(--muted)}
+.t .sub2{display:block;font-size:11px;color:var(--muted);white-space:normal;max-width:260px}
 .grade{display:inline-grid;place-items:center;min-width:24px;height:22px;padding:0 6px;border-radius:6px;font-weight:800;font-size:12px}
 .grade.lg{height:40px;min-width:48px;font-size:21px;border-radius:9px}
 .gmove{display:inline-flex;gap:4px;align-items:center}
@@ -284,6 +284,44 @@ details.more summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(-
 .sub-item .v{font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
 .sub-item .m{font-size:11.5px;color:var(--muted);grid-column:1/-1}
 
+/* ── 결과 보고 ── */
+.rep-head{gap:14px}
+.rep-title{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.rep-title h2{margin:0;font-size:20px;letter-spacing:-.01em}
+.rep-meta{font-size:12.5px;color:var(--muted);margin-top:4px}
+.rep-sum{margin:0;padding:12px 14px 12px 32px;border-radius:10px;background:var(--surface-2);display:grid;gap:6px;font-size:13.5px;color:var(--ink-2)}
+.rep-sum b{color:var(--ink)}
+.dchg{display:inline-grid;grid-template-columns:1fr 1fr;width:112px;height:16px;vertical-align:middle;margin-right:8px}
+.dchg>span{display:flex;align-items:center}
+.dchg>span:first-child{justify-content:flex-end;border-right:1px solid var(--axis)}
+.dchg i{display:block;height:10px}
+.dchg>span:first-child i{background:#d03b3b;border-radius:4px 0 0 4px}
+.dchg>span:last-child i{background:var(--accent);border-radius:0 4px 4px 0}
+.t tr.sub td{background:var(--surface-2);font-size:12px;color:var(--ink-2)}
+.t tr.sub td:first-child{padding-left:26px}
+.t tr.sub.hide{display:none}
+.t tr.grp{cursor:pointer}
+.t tr.grp td:first-child{font-weight:700}
+.caret{display:inline-block;width:14px;color:var(--muted)}
+.crit{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;border-radius:10px;border:1px dashed var(--axis);font-size:12.5px;color:var(--ink-2)}
+.crit .rule{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;background:var(--surface-2);font-weight:700;color:var(--ink)}
+.crit .rule i{font-style:normal;font-weight:700;color:var(--muted)}
+.crit .op{font-weight:800;color:var(--muted)}
+.statrow{display:flex;gap:20px;flex-wrap:wrap;align-items:baseline}
+.statrow .big{font-size:28px;font-weight:750;letter-spacing:-.01em}
+.statrow .big small{font-size:13px;font-weight:600;color:var(--ink-2);margin-left:3px}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  .sidebar,.topbar,.filters,.active-f,.no-print,.tools,.info,.card-f .btn,.card-f .link,#tooltip{display:none!important}
+  .app{display:block;background:none}.main{padding:0;gap:10px}
+  .grid>*{grid-column:span 12!important}
+  .tw{overflow:visible}
+  .card,.kpi,.ins{box-shadow:none;break-inside:avoid}
+  .t tr.sub.hide{display:table-row!important}
+  .grid{gap:10px}
+}
+
 /* ── 툴팁 ── */
 #tooltip{position:fixed;z-index:50;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 28px rgba(15,23,42,.18);padding:8px 10px;font-size:12px;min-width:120px;max-width:280px}
 .tt-title{font-size:11.5px;color:var(--muted);margin-bottom:4px;font-weight:700}
@@ -325,6 +363,7 @@ details.more summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(-
       <div><div class="brand-t">협력사<br>종합평가</div><div class="brand-s">Supplier Evaluation</div></div>
     </div>
     <nav class="nav" aria-label="화면">
+      <a href="#report" data-page="report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg><span>결과 보고<small>보고용 요약 · 인쇄</small></span></a>
       <a href="#overview" data-page="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>전체 결과<small>등급·점수·조치 대상</small></span></a>
       <a href="#area" data-page="area"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 5v8l-8 5-8-5V8z"/><path d="M12 8l4 2.5v3L12 16l-4-2.5v-3z"/></svg><span>분야별 결과<small>영역·평가항목</small></span></a>
       <a href="#company" data-page="company"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V8l6-4v17M10 21h10V10l-6-2"/><path d="M14 13h2M14 17h2M6.5 11h1M6.5 15h1"/></svg><span>협력사별 결과<small>목록·상세</small></span></a>
@@ -359,7 +398,8 @@ details.more summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(-
     <div class="active-f" id="active-f" aria-live="polite"></div>
 
     <div class="empty" id="empty" hidden>조건에 맞는 협력사가 없습니다. 필터를 조정해 주세요.</div>
-    <section class="page" id="page-overview"></section>
+    <section class="page" id="page-report" hidden></section>
+    <section class="page" id="page-overview" hidden></section>
     <section class="page" id="page-area" hidden></section>
     <section class="page" id="page-company" hidden></section>
   </main>
@@ -381,6 +421,19 @@ const CONFIG = {
     { code:'C', name:'원가', max:15 }, { code:'E', name:'환경', max:5 },  { code:'F', name:'재무', max:10 }, { code:'A', name:'기타', max:5 },
   ],
   targets: { avgScore: 80, saRatio: 50, cdLimit: 10 },  // 목표·기준선 ※ 예시 (평균 점수 목표, 우수 비율 목표, 개선 필요 비율 상한)
+  /* 부진사 · 우수사 후보 기준 — ※ 임시 기준. 확정 기준을 받으면 rules만 교체 (mode: any = 하나라도 해당, all = 모두 해당) */
+  criteria: {
+    poor: { name:'부진사', fixed:false, mode:'any', rules: [
+      { label:'D등급', test: x => x.grade === 'D' },
+      { label:'D/T 종합 점수 60점 미만', test: x => x.dtScore < 60 },
+      { label:'전년 대비 2단계 이상 하락', test: x => x.move <= -2 },
+    ] },
+    excellent: { name:'우수사 후보', fixed:false, mode:'all', rules: [
+      { label:'D/T 종합 점수 90점 이상', test: x => x.dtScore >= 90 },
+      { label:'전년 대비 등급 하락 없음', test: x => x.move >= 0 },
+      { label:'등급 조정·거래중단 예정 아님', test: x => !x.adjTarget && !x.stopPlan },
+    ] },
+  },
   orgs: ['A사업부','B사업부','C사업부','D사업부','E사업부'],
   regions: [ {code:'R1',name:'수도권'}, {code:'R2',name:'충청권'}, {code:'R3',name:'영남권'}, {code:'R4',name:'호남권'}, {code:'R5',name:'해외'} ],
   units: ['평가단위 A','평가단위 B','평가단위 C'],
@@ -869,7 +922,7 @@ const cells8 = (x, base) => h('div', { class:'cells8', role:'img', 'aria-label':
    5. 상태 · 필터 · 공통 정의
    ===================================================================== */
 const state = {
-  page:'overview', area:null, company:null, coItem:null, coItemChip:'all', ovDim:'region', act:'all',
+  page:'', area:null, company:null, coItem:null, coItemChip:'all', ovDim:'region', act:'all', rpOpen: new Set(), rpAll: false,
   list:{ q:'', chip:'all', sort:'score_desc', page:1 },
   filters:{ org:'', region:'', inout:'', unit:'', group:'', grade:'' },
 };
@@ -1310,13 +1363,172 @@ function renderCompany(L) {
 }
 
 /* =====================================================================
-   9. 화면 전환 · 필터 · 테마 · 초기화
+   9. 결과 보고 — ① 평균·등급 분포 ② 항목별 전년·올해 증감 ③ 변화폭 큰 업종·협력사 ④ 부진사 ⑤ 우수사 후보
    ===================================================================== */
-const PAGES = ['overview', 'area', 'company'];
-const TITLES = { overview:'전체 결과', area:'분야별 결과', company:'협력사별 결과' };
-const BUILT = {}, BUILDERS = { overview: buildOverview, area: buildArea, company: buildCompany }, RENDERERS = { overview: renderOverview, area: renderArea, company: renderCompany };
+function dchg(v, maxAbs, unit = '', w = 112) {   // 0을 가운데 둔 증감 막대: 오른쪽 파랑 = 상승, 왼쪽 빨강 = 하락
+  const f = clamp(Math.abs(v) / (maxAbs || 1), 0, 1) * 100;
+  return h('span', { style:'white-space:nowrap' }, h('span', { class:'dchg', style:`width:${w}px`, 'aria-hidden':'true' }, h('span', null, v < 0 ? h('i', { style:`width:${f}%` }) : null), h('span', null, v > 0 ? h('i', { style:`width:${f}%` }) : null)), delta(v, unit));
+}
+const critPass = (c, x) => { const m = c.rules.filter(r => r.test(x)).length; return c.mode === 'all' ? m === c.rules.length : m > 0; };
+function critBox(c, L) {
+  const kids = [badge(c.fixed ? '확정 기준' : '임시 기준', c.fixed ? 'good' : 'warn', c.fixed ? null : 'warn'), h('span', null, c.mode === 'all' ? '아래 조건을 모두 만족:' : '아래 조건 중 하나라도 해당:')];
+  c.rules.forEach((r, i) => { if (i) kids.push(h('span', { class:'op' }, c.mode === 'all' ? '그리고' : '또는')); kids.push(h('span', { class:'rule' }, r.label, h('i', null, `${fmt.n(L.filter(r.test).length)}개사`))); });
+  if (!c.fixed) kids.push(h('span', { class:'muted', style:'margin-left:auto' }, '확정 기준을 받으면 바로 교체됩니다'));
+  return h('div', { class:'crit' }, kids);
+}
+const areaGaps = (x, base) => CONFIG.areas.map((a, j) => ({ a, v: x.areas[a.code].conv, d: x.areas[a.code].conv == null ? null : x.areas[a.code].conv - base[j] })).filter(r => r.d != null);
+const bigAreaMove = x => CONFIG.areas.map(a => ({ a, d: x.areas[a.code].conv != null && x.prevAreas[a.code].conv != null ? x.areas[a.code].conv - x.prevAreas[a.code].conv : 0 })).reduce((m, r) => Math.abs(r.d) > Math.abs(m.d) ? r : m);
+const csvBtn = (label, file, header, rows) => h('button', { class:'btn primary sm', type:'button', onclick: () => downloadCSV(file, header, rows()) }, icon('download'), label);
+const supSub = (x, extra) => h('span', null, h('b', null, x.name), h('span', { class:'sub2' }, [x.code, x.org, x.group, extra].filter(Boolean).join(' · ')));
+
+function buildReport() {
+  const expand = h('button', { class:'btn sm', type:'button', id:'rp-expand', onclick: () => { state.rpAll = !state.rpAll; state.rpOpen.clear(); renderAll(); } }, '모두 펼치기');
+  $('#page-report').replaceChildren(
+    h('div', { class:'card rep-head', id:'rp-head' }),
+    secHead(1, '전체 평균 점수와 등급 분포', 'D/T 종합 점수 · D/T 최종 등급 기준'),
+    h('div', { class:'grid' },
+      card('rp-score', 4, '평균 D/T 종합 점수', null, { src:'[평가결과]·[전년도 결과] D/T 종합 점수, 평가 점수 (1번)' }),
+      card('rp-grade', 8, '등급별 협력사 수와 비율', '당해 vs 전년도', { src:'[평가결과]·[전년도 결과] D/T 최종 등급 (1번)' })),
+    secHead(2, '항목별 전년 · 올해 점수 증감', '협력사 평균 점수 기준'),
+    h('div', { class:'grid' },
+      card('rp-items', 5, '점수 항목', '1번 파일 [평가결과] vs [전년도 결과]', { src:'배점, 일반항목 평점, 일반항목 환산점수, 가산점, 평가 점수, D/T 종합 점수 (1번)' }),
+      card('rp-areas', 7, '평가 영역 · 평가항목', '영역을 누르면 평가항목이 펼쳐집니다', { tools: expand, src:'{영역}-환산점수 (2번), 환산평점·이전 환산평점 (3번)' })),
+    secHead(3, '전년 대비 점수 변화가 큰 업종과 협력사', 'D/T 종합 점수 변화폭 기준'),
+    h('div', { class:'grid' },
+      card('rp-ind', 6, '업종별 평균 점수 변화', '세부업종그룹 · 변화 큰 순', { src:'세부업종그룹, D/T 종합 점수, 전년도 D/T 종합 점수 (1번)' }),
+      card('rp-ind2', 6, '업종(세부) 변화 상위 · 하위 5', '업종 단위 · 협력사 10개사 이상', { src:'업종 (2번), D/T 종합 점수 (1번)' })),
+    h('div', { class:'grid' },
+      card('rp-up', 6, '점수 상승 TOP 10', '행을 누르면 협력사 상세', { src:'협력사명·코드, 평가조직, 세부업종그룹, D/T 종합 점수, D/T 최종 등급, {영역}-환산점수 (1·2번)' }),
+      card('rp-down', 6, '점수 하락 TOP 10', '행을 누르면 협력사 상세', { src:'협력사명·코드, 평가조직, 세부업종그룹, D/T 종합 점수, D/T 최종 등급, {영역}-환산점수 (1·2번)' })),
+    secHead(4, CONFIG.criteria.poor.name, CONFIG.criteria.poor.fixed ? '확정 기준' : '기준 확정 전 — 임시 기준 적용'),
+    h('div', { class:'grid' }, card('rp-poor', 12, `${CONFIG.criteria.poor.name} 목록`, '점수 낮은 순', { src:'D/T 최종 등급, D/T 종합 점수, 전년도 등급, {영역}-환산점수 (1·2번)' })),
+    secHead(5, CONFIG.criteria.excellent.name, CONFIG.criteria.excellent.fixed ? '확정 기준' : '기준 확정 전 — 임시 기준 적용'),
+    h('div', { class:'grid' }, card('rp-exc', 12, `${CONFIG.criteria.excellent.name} 목록`, '점수 높은 순', { src:'D/T 종합 점수, D/T 최종 등급, 전년도 등급, 등급 조정 대상, 거래중단예정일, {영역}-환산점수 (1·2번)' })));
+}
+
+function renderReport(L) {
+  const n = L.length, T = CONFIG.targets, PC = CONFIG.criteria.poor, EC = CONFIG.criteria.excellent;
+  const avgDt = avg(L, x => x.dtScore), avgPrev = avg(L, x => x.prev.dtScore);
+  const gc = countBy(L, x => x.grade), gp = countBy(L, x => x.prev.grade);
+  const sa = (gc.S || 0) + (gc.A || 0), cd = (gc.C || 0) + (gc.D || 0), saP = (gp.S || 0) + (gp.A || 0), cdP = (gp.C || 0) + (gp.D || 0);
+  const base = CONFIG.areas.map(a => areaAvg(L, a.code));
+  const areasStat = CONFIG.areas.map(a => ({ a, prev: areaAvg(L, a.code, 'prevAreas'), cur: areaAvg(L, a.code) })).map(r => ({ ...r, d: r.cur - r.prev }));
+  const groupStat = CONFIG.groups.map(g => { const gl = L.filter(x => x.group === g); return { key: g, n: gl.length, prev: avg(gl, x => x.prev.dtScore), cur: avg(gl, x => x.dtScore), up: gl.filter(x => x.dtScore > x.prev.dtScore).length, down: gl.filter(x => x.dtScore < x.prev.dtScore).length }; })
+    .filter(r => r.n).map(r => ({ ...r, d: r.cur - r.prev })).sort((a, b) => b.d - a.d);
+  const poor = L.filter(x => critPass(PC, x)).sort((a, b) => a.dtScore - b.dtScore), exc = L.filter(x => critPass(EC, x)).sort((a, b) => b.dtScore - a.dtScore);
+  const filtTxt = Object.entries(state.filters).filter(([, v]) => v).map(([k, v]) => `${FILTER_LABEL[k]} ${v}`).join(' · ') || '전체';
+  setLead(`대상 ${filtTxt} · 평가 협력사 ${fmt.n(n)}개사 · 기준일 2026-11-09`);
+
+  // 머리 + 핵심 요약
+  const aSorted = [...areasStat].sort((a, b) => b.d - a.d), aLow = aSorted[aSorted.length - 1], gTop = groupStat[0], gLow = groupStat[groupStat.length - 1];
+  $('#rp-head').replaceChildren(
+    h('div', { class:'rep-title' },
+      h('div', null, h('h2', null, `${CONFIG.year}년 협력사 종합평가 결과 보고`), h('div', { class:'rep-meta' }, `대상: ${filtTxt} · 평가 협력사 ${fmt.n(n)}개사 · 기준일 2026-11-09 · ${CONFIG.prevYear}년 대비`)),
+      h('div', { class:'tools no-print' }, h('button', { class:'btn primary', type:'button', onclick: () => window.print() }, '인쇄 · PDF 저장'))),
+    h('ol', { class:'rep-sum' },
+      h('li', null, '평균 D/T 종합 점수 ', h('b', null, `${fmt.sc(avgDt)}점`), ` (전년 ${fmt.sc(avgPrev)}점 대비 `, delta(avgDt - avgPrev, '점'), ')'),
+      h('li', null, '우수(S·A) ', h('b', null, `${fmt.n(sa)}개사 ${fmt.pct(pctOf(sa, n))}`), ` (${fmt.sgn(pctOf(sa, n) - pctOf(saP, n))}%p) · 보통(B) ${fmt.n(gc.B || 0)}개사 ${fmt.pct(pctOf(gc.B || 0, n))} · 개선 필요(C·D) `, h('b', null, `${fmt.n(cd)}개사 ${fmt.pct(pctOf(cd, n))}`), ` (${fmt.sgn(pctOf(cd, n) - pctOf(cdP, n))}%p)`),
+      h('li', null, '영역 증감: 가장 많이 오른 영역 ', h('b', null, `${aname(aSorted[0].a.code)} ${fmt.sgn(aSorted[0].d)}`), aLow.d < 0 ? ', 가장 많이 내린 영역 ' : ', 가장 적게 오른 영역 ', h('b', null, `${aname(aLow.a.code)} ${fmt.sgn(aLow.d)}`)),
+      h('li', null, '업종: 점수 변화 최대 ', h('b', null, `${gTop.key} ${fmt.sgn(gTop.d)}점`), ', 최소 ', h('b', null, `${gLow.key} ${fmt.sgn(gLow.d)}점`)),
+      h('li', null, `${PC.name} `, h('b', null, `${fmt.n(poor.length)}개사`), ` · ${EC.name} `, h('b', null, `${fmt.n(exc.length)}개사`), h('span', { class:'muted' }, PC.fixed && EC.fixed ? '' : ' (임시 기준)'))));
+
+  // ① 평균 점수
+  body('rp-score').replaceChildren(
+    h('div', { class:'gbox' }, `${CONFIG.year}년 평균`), h('div', { class:'hero' }, fmt.sc(avgDt), h('small', null, '점')),
+    h('div', { class:'kpi-row' }, delta(avgDt - avgPrev, '점', { suffix:`전년 ${fmt.sc(avgPrev)}점 대비` })),
+    meter(avgDt / 100, { tick: T.avgScore / 100, label:`평균 ${fmt.sc(avgDt)}점, 목표 ${T.avgScore}점` }),
+    h('div', { class:'kpi-row' }, `세로선 = 목표 ${T.avgScore}점 · ${avgDt >= T.avgScore ? '목표 달성' : `${(T.avgScore - avgDt).toFixed(1)}점 부족`}`),
+    h('div', { class:'statrow', style:'margin-top:4px' },
+      h('div', null, h('div', { class:'gbox' }, '평가 협력사'), h('div', { class:'big' }, fmt.n(n), h('small', null, '개사'))),
+      h('div', null, h('div', { class:'gbox' }, '평균 평가 점수'), h('div', { class:'big' }, fmt.sc(avg(L, x => x.score)), h('small', null, '점')))));
+
+  // ① 등급 분포
+  legend('rp-grade', [{ color: gradeColor('S'), label:'S·A 우수' }, { color: gradeColor('B'), label:'B 보통' }, { color: gradeColor('D'), label:'C·D 개선 필요' }]);
+  segRows(body('rp-grade'), [{ label: String(CONFIG.year), counts: gc, total: n }, { label: String(CONFIG.prevYear), counts: gp, total: n }]);
+  body('rp-grade').append(h('div', { class:'tw' }, simpleTable(
+    [{ label:'등급' }, { label:'구분' }, { label:'당해', num: true }, { label:'비율', num: true }, { label:'전년도', num: true }, { label:'비율', num: true }, { label:'증감', num: true }, { label:'비율 증감', num: true }],
+    CONFIG.grades.map(g => { const c = gc[g] || 0, p = gp[g] || 0; return [gradeChip(g), CONFIG.gradeGroup[g], fmt.n(c), fmt.pct(pctOf(c, n)), fmt.n(p), fmt.pct(pctOf(p, n)), delta(c - p, '', { goodUp: GI[g] <= 1, digits: 0 }), `${fmt.sgn(pctOf(c, n) - pctOf(p, n))}%p`]; }),
+    { footer: ['합계', '', fmt.n(n), '100%', fmt.n(n), '100%', '', ''] })));
+  foot('rp-grade', h('span', { class:'note' }, '증감 색: 우수 등급은 늘면 파랑, 개선 필요 등급은 줄면 파랑'),
+    csvBtn('내려받기', '등급분포.csv', ['등급','구분','당해','당해 비율(%)','전년도','전년도 비율(%)'], () => CONFIG.grades.map(g => [g, CONFIG.gradeGroup[g], gc[g] || 0, pctOf(gc[g] || 0, n).toFixed(1), gp[g] || 0, pctOf(gp[g] || 0, n).toFixed(1)])));
+
+  // ② 점수 항목 (1번)
+  const IR = [['배점', x => x.max, x => x.prev.max], ['일반항목 평점', x => x.genRaw, x => x.prev.genRaw], ['일반항목 환산점수', x => x.gen, x => x.prev.gen], ['가산점', x => x.bonus, x => x.prev.bonus], ['평가 점수', x => x.score, x => x.prev.score], ['D/T 종합 점수', x => x.dtScore, x => x.prev.dtScore]]
+    .map(([label, c, p]) => ({ label, cur: avg(L, c), prev: avg(L, p) })).map(r => ({ ...r, d: r.cur - r.prev }));
+  const maxI = Math.max(...IR.map(r => Math.abs(r.d)), 0.1);
+  body('rp-items').replaceChildren(h('div', { class:'tw' }, simpleTable([{ label:'점수 항목' }, { label:'전년', num: true }, { label:'올해', num: true }, { label:'증감' }],
+    IR.map(r => [r.label === 'D/T 종합 점수' ? h('b', null, r.label) : r.label, fmt.sc(r.prev), fmt.sc(r.cur), dchg(r.d, maxI, '', 90)]))),
+    h('p', { class:'note' }, '협력사 평균 · 배점은 미적용·무실적 평가항목을 뺀 적용 배점'));
+  foot('rp-items', csvBtn('내려받기', '점수항목_증감.csv', ['점수 항목','전년','올해','증감'], () => IR.map(r => [r.label, fmt.sc(r.prev), fmt.sc(r.cur), fmt.sc(r.d)])));
+
+  // ② 평가 영역 · 평가항목 (펼치기)
+  $('#rp-expand').textContent = state.rpAll ? '모두 접기' : '모두 펼치기';
+  const itemRows = Object.fromEntries(CONFIG.areas.map(a => [a.code, itemStats(L, a.code)]));
+  const maxA = Math.max(...areasStat.map(r => Math.abs(r.d)), ...Object.values(itemRows).flat().map(it => Math.abs(it.value - it.prev)), 0.1);
+  const tb = h('tbody');
+  for (const r of areasStat) {
+    const open = state.rpAll || state.rpOpen.has(r.a.code);
+    const grp = h('tr', { class:'grp', tabindex:'0', 'aria-expanded': String(open) }, h('td', null, h('span', { class:'caret' }, open ? '▾' : '▸'), aname(r.a.code)), h('td', { class:'num' }, String(r.a.max)), h('td', { class:'num' }, fmt.sc(r.prev)), h('td', { class:'num' }, h('b', null, fmt.sc(r.cur))), h('td', null, dchg(r.d, maxA, '', 90)));
+    const tog = () => { if (state.rpOpen.has(r.a.code)) state.rpOpen.delete(r.a.code); else state.rpOpen.add(r.a.code); state.rpAll = false; renderAll(); };
+    grp.addEventListener('click', tog); grp.addEventListener('keydown', e => { if (e.key === 'Enter') tog(); });
+    tb.append(grp);
+    for (const it of itemRows[r.a.code]) tb.append(h('tr', { class:'sub' + (open ? '' : ' hide') }, h('td', null, it.name), h('td', { class:'num' }, fmt.sc(it.max)), h('td', { class:'num' }, fmt.sc(it.prev)), h('td', { class:'num' }, fmt.sc(it.value)), h('td', null, dchg(it.value - it.prev, maxA, '', 90))));
+  }
+  body('rp-areas').replaceChildren(h('div', { class:'tw' }, h('table', { class:'t' }, h('thead', null, h('tr', null, h('th', null, '영역 / 평가항목'), h('th', { class:'num' }, '배점'), h('th', { class:'num' }, '전년'), h('th', { class:'num' }, '올해'), h('th', null, '증감'))), tb)));
+  foot('rp-areas', h('span', { class:'note' }, '전년 = 이전 환산평점 기준 · 미적용·무실적 제외 평균'),
+    csvBtn('내려받기', '영역_평가항목_증감.csv', ['구분','영역/평가항목','배점','전년','올해','증감'], () => areasStat.flatMap(r => [['영역', aname(r.a.code), r.a.max, fmt.sc(r.prev), fmt.sc(r.cur), fmt.sc(r.d)], ...itemRows[r.a.code].map(it => ['평가항목', it.name, fmt.sc(it.max), fmt.sc(it.prev), fmt.sc(it.value), fmt.sc(it.value - it.prev)])])));
+
+  // ③ 업종
+  const maxG = Math.max(...groupStat.map(r => Math.abs(r.d)), 0.1);
+  body('rp-ind').replaceChildren(h('div', { class:'tw' }, simpleTable([{ label:'세부업종그룹' }, { label:'협력사', num: true }, { label:'전년', num: true }, { label:'올해', num: true }, { label:'변화' }, { label:'상승 · 하락', num: true }],
+    groupStat.map(r => [h('b', null, r.key), fmt.n(r.n), fmt.sc(r.prev), fmt.sc(r.cur), dchg(r.d, maxG, '점', 80), `${fmt.n(r.up)} · ${fmt.n(r.down)}`]))));
+  foot('rp-ind', callout('', 'info', ['변화 최대 ', h('b', null, `${gTop.key} ${fmt.sgn(gTop.d)}점`), ' · 최소 ', h('b', null, `${gLow.key} ${fmt.sgn(gLow.d)}점`)]));
+  const inds = [...new Set(L.map(x => x.industry))].map(k => { const il = L.filter(x => x.industry === k); return { key: k, group: il[0].group, n: il.length, prev: avg(il, x => x.prev.dtScore), cur: avg(il, x => x.dtScore) }; }).filter(r => r.n >= 10).map(r => ({ ...r, d: r.cur - r.prev })).sort((a, b) => b.d - a.d);
+  const maxInd = Math.max(...inds.map(r => Math.abs(r.d)), 0.1);
+  const indRow = r => [h('b', null, r.key), r.group, fmt.n(r.n), fmt.sc(r.prev), fmt.sc(r.cur), dchg(r.d, maxInd, '점', 70)];
+  const hdr = t => [h('span', { class:'tag gray', style:'margin:0' }, t), '', '', '', '', ''];
+  body('rp-ind2').replaceChildren(inds.length ? h('div', { class:'tw' }, simpleTable([{ label:'업종' }, { label:'그룹' }, { label:'협력사', num: true }, { label:'전년', num: true }, { label:'올해', num: true }, { label:'변화' }],
+    [hdr('변화 큰 업종 5'), ...inds.slice(0, 5).map(indRow), hdr('변화 작은 업종 5'), ...inds.slice(-5).reverse().map(indRow)])) : h('p', { class:'note' }, '협력사 10개사 이상인 업종이 없습니다.'));
+
+  // ③ 협력사 상승 · 하락 TOP 10
+  const mv = L.map(x => ({ x, d: x.dtScore - x.prev.dtScore }));
+  const ups = [...mv].sort((a, b) => b.d - a.d).slice(0, 10), downs = [...mv].sort((a, b) => a.d - b.d).slice(0, 10);
+  const maxM = Math.max(...ups.concat(downs).map(r => Math.abs(r.d)), 0.1);
+  const mvTable = list => list.length ? h('div', { class:'tw' }, simpleTable([{ label:'협력사 · 변동 큰 영역' }, { label:'전년 → 올해', num: true }, { label:'변화폭' }, { label:'등급' }],
+    list.map(({ x, d }) => { const bm = bigAreaMove(x); return [supSub(x, bm.d ? `${aname(bm.a.code)} ${fmt.sgn(bm.d)}` : ''), `${fmt.sc(x.prev.dtScore)} → ${fmt.sc(x.dtScore)}`, dchg(d, maxM, '점', 60), gmove(x.prev.grade, x.grade)]; }),
+    { onRow: i => openCompany(list[i].x.code) })) : h('p', { class:'note' }, '대상이 없습니다.');
+  body('rp-up').replaceChildren(mvTable(ups)); body('rp-down').replaceChildren(mvTable(downs));
+  const mvCsv = list => () => list.map(({ x, d }) => { const bm = bigAreaMove(x); return [x.name, x.code, x.org, x.group, x.industry, fmt.sc(x.prev.dtScore), fmt.sc(x.dtScore), fmt.sc(d), x.prev.grade, x.grade, bm.d ? `${aname(bm.a.code)} ${fmt.sgn(bm.d)}` : '']; });
+  const mvHead = ['협력사명','협력사 코드','평가조직','세부업종그룹','업종','전년도 D/T 종합 점수','D/T 종합 점수','변화폭','전년도 등급','D/T 최종 등급','변동 큰 영역'];
+  foot('rp-up', h('span', { class:'note' }, '아래 회색 글자 = 코드 · 평가조직 · 업종그룹 · 가장 크게 변한 영역'), csvBtn('내려받기', '점수상승_TOP10.csv', mvHead, mvCsv(ups)));
+  foot('rp-down', h('span', { class:'note' }, '아래 회색 글자 = 코드 · 평가조직 · 업종그룹 · 가장 크게 변한 영역'), csvBtn('내려받기', '점수하락_TOP10.csv', mvHead, mvCsv(downs)));
+
+  // ④ 부진사 · ⑤ 우수사 후보
+  const byOrg = list => Object.entries(countBy(list, x => x.org)).sort((a, b) => b[1] - a[1]).map(([o, c]) => `${o} ${fmt.n(c)}`).join(' · ') || '–';
+  const SHOW = 20;
+  const critList = (id, c, list, weak) => {
+    body(id).replaceChildren(critBox(c, L),
+      h('div', { class:'statrow' }, h('div', null, h('div', { class:'gbox' }, c.name), h('div', { class:'big' }, fmt.n(list.length), h('small', null, `개사 · 전체의 ${fmt.pct(pctOf(list.length, n))}`))), h('div', { class:'kpi-row' }, `평가조직별: ${byOrg(list)}`)),
+      list.length ? h('div', { class:'tw' }, simpleTable([{ label:'협력사' }, { label:'D/T 종합 점수', num: true }, { label:'전년 대비', num: true }, { label:'등급 (전년 → 당해)' }, { label: weak ? '해당 기준' : '충족 기준' }, { label: weak ? '가장 약한 영역' : '가장 강한 영역' }],
+        list.slice(0, SHOW).map(x => { const g = areaGaps(x, base), pickA = weak ? g.reduce((m, r) => r.d < m.d ? r : m, g[0]) : g.reduce((m, r) => r.d > m.d ? r : m, g[0]);
+          return [supSub(x), h('b', null, fmt.sc(x.dtScore)), delta(x.dtScore - x.prev.dtScore), gmove(x.prev.grade, x.grade), h('span', { class:'badges' }, c.rules.filter(r => r.test(x)).map(r => badge(r.label, weak ? 'bad' : 'good'))), pickA ? h('span', null, aname(pickA.a.code), ' ', h('span', { class:'muted' }, `${fmt.sc(pickA.v)} (평균 대비 ${fmt.sgn(pickA.d)})`)) : '–']; }),
+        { onRow: i => openCompany(list[i].code) })) : h('p', { class:'note' }, '해당하는 협력사가 없습니다.'));
+    foot(id, h('span', { class:'note' }, list.length > SHOW ? `${SHOW}개사 표시 · 전체 ${fmt.n(list.length)}개사는 내려받기로 확인` : `전체 ${fmt.n(list.length)}개사`),
+      csvBtn(`${c.name} 명단 내려받기`, `${c.name}_명단.csv`, ['협력사명','협력사 코드','평가조직','세부업종그룹','D/T 종합 점수','전년도 D/T 종합 점수','전년도 등급','D/T 최종 등급','해당 기준', ...CONFIG.areas.map(a => `${a.code}-환산점수`)],
+        () => list.map(x => [x.name, x.code, x.org, x.group, fmt.sc(x.dtScore), fmt.sc(x.prev.dtScore), x.prev.grade, x.grade, c.rules.filter(r => r.test(x)).map(r => r.label).join(' / '), ...CONFIG.areas.map(a => x.areas[a.code].conv == null ? '' : fmt.sc(x.areas[a.code].conv))])));
+  };
+  critList('rp-poor', PC, poor, true);
+  critList('rp-exc', EC, exc, false);
+}
+
+/* =====================================================================
+   10. 화면 전환 · 필터 · 테마 · 초기화
+   ===================================================================== */
+const PAGES = ['report', 'overview', 'area', 'company'];
+const TITLES = { report:'결과 보고', overview:'전체 결과', area:'분야별 결과', company:'협력사별 결과' };
+const BUILT = {}, BUILDERS = { report: buildReport, overview: buildOverview, area: buildArea, company: buildCompany }, RENDERERS = { report: renderReport, overview: renderOverview, area: renderArea, company: renderCompany };
 function route() {
-  const p = (location.hash || '#overview').slice(1), next = PAGES.includes(p) ? p : 'overview';
+  const p = (location.hash || '#report').slice(1), next = PAGES.includes(p) ? p : 'report';
   if (next !== state.page) window.scrollTo(0, 0);
   state.page = next;
   document.querySelectorAll('.nav a').forEach(a => { if (a.dataset.page === next) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });

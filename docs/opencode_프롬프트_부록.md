@@ -5,14 +5,15 @@
 > **구성**: A. CSS · B. HTML 뼈대(AI 대화 패널 포함) · C. 설정·컬럼 매핑 · D. 공통 참조 코드(유틸·포맷·툴팁·카드·차트·상태·라우팅) · E. 샘플 데이터 생성기 · F. 골든 값(정답 숫자) · G. 화면 참조 코드(결과 요약·항목별·협력사별)
 >
 > **사용법**: 자기 구조(파일 분리, 프레임워크 사용 등)에 맞게 옮겨도 되지만 **수치·수식·문구·호출 순서는 바꾸지 않습니다.** 목업은 가상 데이터로 `file://`에서 단독 실행되는 한 파일입니다. 실제 구현에서 달라져야 하는 곳:
-> 1. **데이터**: 샘플 생성기(E) 대신 `window.__SUPPLIER_DATA__`를 읽습니다(본문 §6.4). 협력사 식별자는 `code` 대신 `key`를 씁니다.
+> 1. **데이터**: 샘플 생성기(E) 대신 `window.__SUPPLIER_DATA__`를 읽습니다(본문 §6.4). 읽는 자리는 `loadData()` 한 곳이고 **샘플 생성기는 주소에 `?sample=1`일 때만** 씁니다(본문 §5.1·§12). 협력사 식별자는 `code` 대신 `key`를 씁니다.
 > 2. **설정**: `CONFIG`(C)는 `config/settings.js`(본문 §11)로 옮기고 `criteria`는 선언형 규칙으로 바꿉니다. 영역 `max`(배점)는 데이터(`{영역}-배점` 중앙값)에서 계산합니다.
 > 3. **고정 값**: 「2026-11-09」「최종 갱신 …」「데이터: 가상 샘플 (목업)」「2026년 평가」 같은 문구는 데이터/설정에서 채웁니다.
 > 4. **세부항목(④)**: 목업의 `subItems()`는 가상 값을 만듭니다 → 실제는 `data.subItems[key][항목코드]`.
 > 5. **협력사별 결과의 기본 선택**: 목업의 「평가조직 3곳 + 등급 하락」은 시연용 → 실제는 목록의 첫 협력사.
 > 6. **전년 없는 협력사(신규)**: 목업은 모든 협력사에 전년이 있다고 가정합니다 → 본문 §6.8대로 null을 처리합니다.
 > 7. **AI 대화 패널**(섹션 10, 부록 A의 `.chat-*` CSS, 부록 B의 `#chat-root`): **화면과 열고 닫는 동작만** 있고 LLM 호출 코드는 없습니다. `window.SUPPLIER_CHAT.ask`가 정의돼 있으면 그것을 부르고(사내 API는 사용자가 따로 연결), 없으면 「API 미연결」 데모 답변을 보여 줍니다. **이 코드에 LLM 주소·키·호출 코드를 넣지 마세요**(본문 §9.5).
-> 8. **옮기지 않아도 되는 미사용 조각**: `ACT.all`, `ACT.d`, `openArea`, `niceMax`, `roundTop`, 샘플의 `change`·`orgGrade` 필드, CSS `.bigtrio` `.ins` `.detail-tag` `.gline` `.seg-ctl`.
+> 8. **연도 자료 부분 제공**: 목업은 항상 5개년 자료가 있습니다. 실제는 기준연도 1개년만으로 시작할 수 있으므로, 자료 없는 해는 점·선·막대를 그리지 않고 5개년 추이 카드에 「자료 n/5개년」 배지를 붙입니다(본문 §6.9). 이 부분은 목업에 없으므로 **본문이 기준**입니다.
+> 9. **옮기지 않아도 되는 미사용 조각**: `ACT.all`, `ACT.d`, `openArea`, `niceMax`, `roundTop`, 샘플의 `change`·`orgGrade` 필드, CSS `.bigtrio` `.ins` `.detail-tag` `.gline` `.seg-ctl`.
 
 ---
 
@@ -447,7 +448,7 @@ body.show-detail .detail-only{display:flex!important}
 ## 부록 B. HTML 뼈대 (`src/index.html` 그대로)
 
 - `AI 대화 패널`(`#chat-root`)은 `.app` 밖, 툴팁 다음에 있습니다(본문 §9.5).
-- 아래 `<body>` 안의 `<script>`는 **데이터(`data.js`)와 앱(`app.js`)** 두 개입니다. 목업은 이 둘을 한 파일에 넣었습니다.
+- 아래 `<body>` 끝의 `<script>`는 **설정(`settings.js`) · 데이터(`data.js`) · (선택) AI 어댑터(`chat-adapter.js`, 주석 처리) · 앱(`app.js`)** 입니다. 목업은 이것들을 한 파일에 넣었습니다. **모두 일반 스크립트**이며 ES 모듈은 쓰지 않습니다(본문 §5.1).
 - 화면 안의 고정 값(`2026년 협력사 종합평가`, `2026년 평가`, `최종 갱신 …`, `데이터: …`)은 데이터에서 채웁니다.
 - 필터 `select`의 `option`(전체 + 값 목록)은 스크립트가 채웁니다.
 
@@ -538,7 +539,9 @@ body.show-detail .detail-only{display:flex!important}
   </aside>
 </div>
 
-<script src="data.js"></script>   <!-- window.__SUPPLIER_DATA__ (샘플 모드에서는 없어도 됨) -->
+<script src="settings.js"></script>              <!-- window.SUPPLIER_SETTINGS (config/settings.js를 빌드가 dist/로 복사) -->
+<script src="data.js?v=__BUILD__"></script>      <!-- window.__SUPPLIER_DATA__ (빌드가 __BUILD__를 빌드 시각으로 바꿈, 캐시 방지). ?sample=1 이면 없어도 됨 -->
+<!-- <script src="chat-adapter.js"></script> -->  <!-- AI 대화: 사내 API를 연결할 때 주석을 풀고 chat-adapter.js를 만듭니다 (본문 §9.5-5) -->
 <script src="app.js"></script>
 </body>
 </html>

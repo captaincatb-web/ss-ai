@@ -2,7 +2,7 @@
 
 > 이 부록은 목업 `종합평가_대시보드_목업.html`에서 **그대로 추출**한 정밀 자료입니다. 본문(`opencode_프롬프트_본문.md`)의 §9 서술과 다르게 보이는 곳이 있으면 **이 부록의 코드가 기준**입니다.
 >
-> **구성**: A. CSS · B. HTML 뼈대 · C. 설정·컬럼 매핑 · D. 공통 참조 코드(유틸·포맷·툴팁·카드·차트·상태·라우팅) · E. 샘플 데이터 생성기 · F. 골든 값(정답 숫자) · G. 화면 참조 코드(결과 요약·항목별·협력사별)
+> **구성**: A. CSS · B. HTML 뼈대(AI 대화 패널 포함) · C. 설정·컬럼 매핑 · D. 공통 참조 코드(유틸·포맷·툴팁·카드·차트·상태·라우팅) · E. 샘플 데이터 생성기 · F. 골든 값(정답 숫자) · G. 화면 참조 코드(결과 요약·항목별·협력사별)
 >
 > **사용법**: 자기 구조(파일 분리, 프레임워크 사용 등)에 맞게 옮겨도 되지만 **수치·수식·문구·호출 순서는 바꾸지 않습니다.** 목업은 가상 데이터로 `file://`에서 단독 실행되는 한 파일입니다. 실제 구현에서 달라져야 하는 곳:
 > 1. **데이터**: 샘플 생성기(E) 대신 `window.__SUPPLIER_DATA__`를 읽습니다(본문 §6.4). 협력사 식별자는 `code` 대신 `key`를 씁니다.
@@ -11,7 +11,8 @@
 > 4. **세부항목(④)**: 목업의 `subItems()`는 가상 값을 만듭니다 → 실제는 `data.subItems[key][항목코드]`.
 > 5. **협력사별 결과의 기본 선택**: 목업의 「평가조직 3곳 + 등급 하락」은 시연용 → 실제는 목록의 첫 협력사.
 > 6. **전년 없는 협력사(신규)**: 목업은 모든 협력사에 전년이 있다고 가정합니다 → 본문 §6.8대로 null을 처리합니다.
-> 7. **옮기지 않아도 되는 미사용 조각**: `ACT.all`, `ACT.d`, `openArea`, `niceMax`, `roundTop`, 샘플의 `change`·`orgGrade` 필드, CSS `.bigtrio` `.ins` `.detail-tag` `.gline` `.seg-ctl`.
+> 7. **AI 대화 패널**(섹션 10, 부록 A의 `.chat-*` CSS, 부록 B의 `#chat-root`): **화면과 열고 닫는 동작만** 있고 LLM 호출 코드는 없습니다. `window.SUPPLIER_CHAT.ask`가 정의돼 있으면 그것을 부르고(사내 API는 사용자가 따로 연결), 없으면 「API 미연결」 데모 답변을 보여 줍니다. **이 코드에 LLM 주소·키·호출 코드를 넣지 마세요**(본문 §9.5).
+> 8. **옮기지 않아도 되는 미사용 조각**: `ACT.all`, `ACT.d`, `openArea`, `niceMax`, `roundTop`, 샘플의 `change`·`orgGrade` 필드, CSS `.bigtrio` `.ins` `.detail-tag` `.gline` `.seg-ctl`.
 
 ---
 
@@ -301,8 +302,8 @@ body.show-detail .detail-only{display:flex!important}
 @media print{
   @page{size:A4;margin:12mm}
   body{background:#fff}
-  .sidebar,.topbar,.filters,.active-f,.no-print,.tools,.info,.card-f .btn,.card-f .link,#tooltip{display:none!important}
-  .app{display:block;background:none}.main{padding:0;gap:10px}
+  .sidebar,.topbar,.filters,.active-f,.no-print,.tools,.info,.card-f .btn,.card-f .link,#tooltip,.chat-root{display:none!important}
+  .app{display:block;background:none;padding-right:0!important}.main{padding:0;gap:10px}
   .grid>*{grid-column:span 12!important}
   .tw{overflow:visible}
   .card,.kpi,.ins{box-shadow:none;break-inside:avoid}
@@ -317,6 +318,105 @@ body.show-detail .detail-only{display:flex!important}
 .tt-row strong{font-variant-numeric:tabular-nums;font-size:13px}
 .tt-key{width:12px;height:2px;border-radius:1px;flex:none}
 .tt-label{color:var(--ink-2)}
+
+/* ── AI 대화 패널 (오른쪽 · 화살표 손잡이) ── */
+:root{--chat-w:380px;--chat-user:#1c5cab}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.chat-handle{position:fixed;top:50%;right:0;transform:translateY(-50%);z-index:41;width:30px;height:92px;border:1px solid var(--border);border-right:0;border-radius:12px 0 0 12px;background:var(--surface);color:var(--ink-2);box-shadow:-4px 0 14px rgba(15,23,42,.10);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:0;transition:right .22s ease,background .15s}
+.chat-handle:hover{background:var(--surface-2)}
+.chat-handle svg{width:16px;height:16px;flex:none}
+.chat-handle .ch-ai{color:var(--accent)}
+.chat-handle .chev{transition:transform .22s ease}
+.chat-root[data-open="true"] .chat-handle{right:var(--chat-w)}
+.chat-root[data-open="true"] .chat-handle .chev{transform:rotate(180deg)}
+.chat-panel{position:fixed;top:0;right:0;bottom:0;width:var(--chat-w);max-width:100vw;z-index:40;background:var(--surface);color:var(--ink);border-left:1px solid var(--border);box-shadow:-10px 0 30px rgba(15,23,42,.12);display:flex;flex-direction:column;transform:translateX(100%);visibility:hidden;transition:transform .22s ease,visibility 0s linear .22s}
+.chat-root[data-open="true"] .chat-panel{transform:none;visibility:visible;transition:transform .22s ease,visibility 0s}
+.chat-h{display:flex;align-items:center;gap:6px;padding:12px 10px 12px 16px;border-bottom:1px solid var(--grid)}
+.chat-h .ttl{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.chat-h .ttl>i{width:30px;height:30px;border-radius:10px;background:var(--chip-blue);color:var(--accent-ink);display:grid;place-items:center;flex:none}
+.chat-h .ttl>i svg{width:17px;height:17px}
+.chat-h .ttl>span{min-width:0}
+#chat-status{flex:none}
+.chat-h .ttl b{display:block;font-size:14.5px;line-height:1.25}
+.chat-h .ttl small{display:block;font-size:11px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{width:30px;height:30px;border-radius:8px;border:1px solid transparent;background:none;color:var(--ink-2);display:grid;place-items:center;cursor:pointer;padding:0;flex:none}
+.icon-btn:hover{background:var(--surface-2);border-color:var(--border)}
+.icon-btn svg{width:16px;height:16px}
+.chat-ctx{display:flex;align-items:center;gap:8px;padding:8px 16px;border-bottom:1px solid var(--grid);font-size:12px;color:var(--ink-2);min-width:0}
+.chat-ctx .chip{height:26px;padding:0 10px;font-size:12px;flex:none}
+.chat-ctx .txt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat-log{flex:1;min-height:0;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.chat-empty{margin:auto 0;display:flex;flex-direction:column;gap:14px}
+.chat-empty .hi{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:6px 0}
+.chat-empty .hi>i{width:46px;height:46px;border-radius:15px;background:var(--chip-blue);color:var(--accent-ink);display:grid;place-items:center;margin-bottom:4px}
+.chat-empty .hi>i svg{width:24px;height:24px}
+.chat-empty .hi b{font-size:16px}
+.chat-empty .hi span{font-size:12.5px;color:var(--muted)}
+.sugg{display:flex;flex-direction:column;gap:8px}
+.sugg button{text-align:left;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface);font-size:13px;font-weight:600;cursor:pointer;display:flex;gap:8px;align-items:center;line-height:1.35}
+.sugg button:hover{background:var(--surface-2);border-color:var(--axis)}
+.sugg button svg{width:14px;height:14px;color:var(--accent);flex:none}
+.msg{display:flex;gap:8px;align-items:flex-start;min-width:0}
+.msg.user{justify-content:flex-end}
+.msg .av{width:26px;height:26px;border-radius:50%;background:var(--chip-blue);color:var(--accent-ink);display:grid;place-items:center;flex:none}
+.msg .av svg{width:14px;height:14px}
+.msg-col{display:flex;flex-direction:column;min-width:0;max-width:100%}
+.msg.user .msg-col{align-items:flex-end;max-width:88%}
+.msg.ai .msg-col{max-width:calc(100% - 34px)}
+.bub{padding:9px 12px;border-radius:14px;font-size:13.5px;line-height:1.55;overflow-wrap:anywhere;min-width:0}
+.msg.user .bub{background:var(--chat-user);color:#fff;border-bottom-right-radius:4px;white-space:pre-wrap}
+.msg.ai .bub{background:var(--surface-2);border:1px solid var(--border);border-top-left-radius:4px}
+.msg.ai .bub.err{background:var(--chip-bad);border-color:transparent}
+.bub p{margin:0}
+.bub p+p,.bub p+ul,.bub p+ol,.bub ul+p,.bub ol+p{margin-top:6px}
+.bub ul,.bub ol{margin:0;padding-left:18px}
+.bub li+li{margin-top:2px}
+.bub code{font:12px/1.4 ui-monospace,Consolas,monospace;background:var(--chip-gray);padding:1px 5px;border-radius:4px}
+.msg .meta{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--muted);margin-top:4px;min-height:20px}
+.msg .meta .link{font-size:11px;font-weight:600;color:var(--muted)}
+.msg .meta .link:hover{color:var(--accent-ink)}
+.msg .meta .badge{height:18px;font-size:10.5px;padding:0 6px}
+.dots{display:inline-flex;gap:4px;align-items:center;height:18px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:chatdot 1.1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}
+.dots i:nth-child(3){animation-delay:.3s}
+@keyframes chatdot{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+.chat-f{padding:10px 14px 12px;border-top:1px solid var(--grid);display:flex;flex-direction:column;gap:6px}
+.chat-box{display:flex;gap:8px;align-items:flex-end;border:1px solid var(--border);background:var(--surface-2);border-radius:12px;padding:6px 6px 6px 12px}
+.chat-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px var(--chip-blue)}
+.chat-box textarea{flex:1;resize:none;border:0;background:transparent;outline:none;font:inherit;color:inherit;line-height:1.5;min-height:24px;max-height:120px;padding:5px 0;min-width:0}
+.chat-send{width:34px;height:34px;border-radius:9px;border:0;background:var(--accent);color:#fff;display:grid;place-items:center;cursor:pointer;flex:none;padding:0}
+.chat-send svg{width:16px;height:16px}
+.chat-send:disabled{background:var(--chip-gray);color:var(--muted);cursor:not-allowed}
+.chat-note{font-size:11px;color:var(--muted);text-align:center}
+/* 넓은 화면(1480px 이상)에서는 패널이 본문을 옆으로 밀고, 그보다 좁으면 본문 위에 겹쳐서 열림 */
+@media (min-width:1480px){
+  .app{transition:padding-right .22s ease}
+  .app.chat-open{padding-right:var(--chat-w)}
+}
+/* 패널이 본문 폭을 줄인 만큼 반응형 기준을 함께 올림 (1320+380, 1180+380) */
+@media (min-width:1480px) and (max-width:1699px){
+  .app.chat-open .kpis,.app.chat-open .kpis.k4{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .app.chat-open .kpis .kpi.key{grid-column:span 3}
+  .app.chat-open .atiles{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (min-width:1480px) and (max-width:1559px){
+  .app.chat-open .span-3,.app.chat-open .span-4,.app.chat-open .span-5{grid-column:span 6}
+  .app.chat-open .span-6,.app.chat-open .span-7,.app.chat-open .span-8{grid-column:span 12}
+  .app.chat-open .co-head{grid-template-columns:1fr}
+  .app.chat-open .dl{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .chat-panel{width:100vw}
+  .chat-handle{top:auto;bottom:16px;right:16px;transform:none;width:48px;height:48px;border:0;border-radius:50%;background:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(15,23,42,.28);flex-direction:row;gap:0}
+  .chat-handle .ch-ai{color:#fff;width:22px;height:22px}
+  .chat-handle .chev{display:none}
+  .chat-root[data-open="true"] .chat-handle{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .chat-panel,.chat-handle,.chat-handle .chev,.app{transition:none!important}
+  .dots i{animation:none;opacity:.6}
+}
 
 /* ── 반응형 ── */
 @media (max-width:1320px){.kpis,.kpis.k4{grid-template-columns:repeat(3,minmax(0,1fr))}.kpis .kpi.key{grid-column:span 3}.atiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -346,6 +446,7 @@ body.show-detail .detail-only{display:flex!important}
 
 ## 부록 B. HTML 뼈대 (`src/index.html` 그대로)
 
+- `AI 대화 패널`(`#chat-root`)은 `.app` 밖, 툴팁 다음에 있습니다(본문 §9.5).
 - 아래 `<body>` 안의 `<script>`는 **데이터(`data.js`)와 앱(`app.js`)** 두 개입니다. 목업은 이 둘을 한 파일에 넣었습니다.
 - 화면 안의 고정 값(`2026년 협력사 종합평가`, `2026년 평가`, `최종 갱신 …`, `데이터: …`)은 데이터에서 채웁니다.
 - 필터 `select`의 `option`(전체 + 값 목록)은 스크립트가 채웁니다.
@@ -408,6 +509,34 @@ body.show-detail .detail-only{display:flex!important}
   </main>
 </div>
 <div id="tooltip" role="tooltip" hidden></div>
+
+<div class="chat-root" id="chat-root" data-open="false">
+  <button class="chat-handle" id="chat-handle" type="button" aria-controls="chat-panel" aria-expanded="false" aria-label="AI 대화 열기" title="AI 대화">
+    <svg class="ch-ai" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+  <aside class="chat-panel" id="chat-panel" role="complementary" aria-label="AI 대화" aria-hidden="true">
+    <header class="chat-h">
+      <div class="ttl">
+        <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></i>
+        <span><b id="chat-name">AI 어시스턴트</b><small>현재 화면 기준으로 질문해요</small></span>
+      </div>
+      <span class="badge warn" id="chat-status">API 미연결</span>
+      <button class="icon-btn" id="chat-new" type="button" aria-label="새 대화" title="새 대화"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button class="icon-btn" id="chat-close" type="button" aria-label="AI 대화 닫기" title="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+    </header>
+    <div class="chat-ctx" id="chat-ctx"></div>
+    <div class="chat-log" id="chat-log"></div>
+    <div class="sr-only" id="chat-live" role="status" aria-live="polite"></div>
+    <footer class="chat-f">
+      <form class="chat-box" id="chat-form" autocomplete="off">
+        <textarea id="chat-input" rows="1" placeholder="질문을 입력하세요 · Enter로 전송" title="Enter: 전송 · Shift+Enter: 줄바꿈" aria-label="질문 입력"></textarea>
+        <button class="chat-send" id="chat-send" type="submit" aria-label="보내기" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+      </form>
+      <div class="chat-note">AI 답변은 부정확할 수 있습니다. 중요한 수치는 화면에서 확인하세요.</div>
+    </footer>
+  </aside>
+</div>
 
 <script src="data.js"></script>   <!-- window.__SUPPLIER_DATA__ (샘플 모드에서는 없어도 됨) -->
 <script src="app.js"></script>
@@ -493,7 +622,7 @@ const COLUMNS = {
 
 ## 부록 D. 공통 참조 코드 (유틸 · 포맷 · 툴팁 · 카드 · 차트 · 상태 · 라우팅)
 
-섹션 3(유틸·팔레트·툴팁·카드·표·칩·CSV) · 섹션 4(차트) · 섹션 5(상태·필터·목록 정의) · 섹션 6(공통 부품) · 섹션 10(라우팅·필터·테마)입니다. **차트 수치(여백, 선 굵기, 글자 크기)와 포맷 함수는 이 코드가 기준**입니다.
+섹션 3(유틸·팔레트·툴팁·카드·표·칩·CSV) · 섹션 4(차트) · 섹션 5(상태·필터·목록 정의) · 섹션 6(공통 부품) · 섹션 10(**AI 대화 패널**) · 섹션 11(화면 전환·필터·테마·초기화)입니다. **차트 수치(여백, 선 굵기, 글자 크기)와 포맷 함수는 이 코드가 기준**입니다.
 
 ```js
 /* =====================================================================
@@ -584,6 +713,8 @@ const ICON = {
   arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>', download:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
   target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>', trend:'<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>',
   bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.4 1 1.1 1 1.8V17h5v-1.3c0-.7.4-1.4 1-1.8A6 6 0 0012 3z"/>',
+  sparkle:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
+  copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/>', chat:'<path d="M21 12a8 8 0 01-11.6 7.1L4 20l1-4.6A8 8 0 1121 12z"/>',
 };
 const icon = name => { const e = s('svg', { viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', 'stroke-width':2, 'stroke-linecap':'round', 'stroke-linejoin':'round', 'aria-hidden':'true' }); e.innerHTML = ICON[name]; return e; };
 const badge = (text, kind, ic) => h('span', { class:'badge' + (kind ? ' ' + kind : '') }, ic ? icon(ic) : null, text);
@@ -860,7 +991,114 @@ function expandTable(cols, groups, { isOpen, onToggle, onSub, selSub } = {}) {
 const gradeLegend = id => legend(id, CONFIG.grades.map(g => ({ color: gradeColor(g), label:`${g} ${CONFIG.gradeGroup[g]}` })));
 
 /* =====================================================================
-   10. 화면 전환 · 필터 · 테마 · 초기화
+   10. AI 대화 패널 — 오른쪽 패널 + 화살표 손잡이 (디자인·동작). 사내 LLM API는 window.SUPPLIER_CHAT.ask 로 연결
+   ===================================================================== */
+/* ★ 사내 API 연결 자리 — 이 스크립트보다 먼저 한 번만 정의하면 됩니다. (키·주소·호출 코드는 여기 없음)
+   window.SUPPLIER_CHAT = {
+     name: '사내 AI',                                                       // (선택) 패널 제목
+     ask: async ({ message, history, context }) => '답변'                    // 문자열 또는 { text: '답변' }
+   };
+   · history = 이번 질문 앞의 대화 [{ role: 'user' | 'assistant', text }] (최근 20개)
+   · context = 화면 정보 { screen, hash, year, filters, count, detail, summary, selected } — 패널의 '현재 화면 포함'을 끄면 null
+   · 답변 글자는 마크다운 일부(**굵게**, `코드`, - 목록, 1. 목록)를 보여 줍니다. 연결 전에는 'API 미연결' 안내 답변(데모 응답)이 나옵니다. */
+const CHAT = { open: false, busy: false, useCtx: true, gen: 0, msgs: [] };
+const chatApi = () => (window.SUPPLIER_CHAT && typeof window.SUPPLIER_CHAT.ask === 'function') ? window.SUPPLIER_CHAT : null;
+const chatEls = { root: $('#chat-root'), handle: $('#chat-handle'), panel: $('#chat-panel'), ctx: $('#chat-ctx'), log: $('#chat-log'), live: $('#chat-live'), form: $('#chat-form'), input: $('#chat-input'), send: $('#chat-send') };
+
+function chatContext() {            // 질문과 함께 보낼 현재 화면 정보 (필요한 만큼만)
+  const L = filtered(), n = L.length;
+  const c = { screen: TITLES[state.page], hash: '#' + state.page, year: CONFIG.year, filters: Object.fromEntries(Object.entries(state.filters).filter(([, v]) => v).map(([k, v]) => [FILTER_LABEL[k], v])), count: n, detail: state.detail };
+  if (n) { const gc = countBy(L, x => x.grade); c.summary = { avgDtScore: Math.round(avg(L, x => x.dtScore) * 10) / 10, grades: Object.fromEntries(CONFIG.grades.map(g => [g, gc[g] || 0])) }; }
+  if (state.page === 'company' && BY_CODE.has(state.company)) { const x = BY_CODE.get(state.company); c.selected = { type: '협력사', code: x.code, name: x.name, grade: x.grade, dtScore: x.dtScore }; }
+  if (state.page === 'area' && state.area) c.selected = { type: '영역', code: state.area, name: AREA[state.area].name };
+  return c;
+}
+function chatSuggestions() {        // 화면에 따라 달라지는 추천 질문
+  if (state.page === 'area' && state.area) { const a = aname(state.area); return [`${a} 영역 점수가 낮은 이유가 뭘까?`, `${a}에서 먼저 개선할 평가항목은?`, '전년 대비 가장 좋아진 영역은 어디야?']; }
+  if (state.page === 'company' && BY_CODE.has(state.company)) { const nm = BY_CODE.get(state.company).name; return [`${nm} 결과를 3줄로 요약해줘`, `${nm}의 약점 영역과 개선 방향은?`, `${nm}의 5개년 추이를 설명해줘`]; }
+  return ['이번 결과를 3줄로 요약해줘', '등급이 하락한 협력사의 공통점은?', '부진사 목록과 원인을 정리해줘', '전년 대비 가장 좋아진 업종은?'];
+}
+function chatRich(text) {           // 안전한 간이 마크다운 → DOM (innerHTML을 쓰지 않음)
+  const box = h('div'); let list = null, kind = '';
+  const inline = (s, parent) => { s.split(/(\*\*[^*]+\*\*|`[^`]+`)/).forEach(t => { if (!t) return; if (t.length > 4 && t.startsWith('**') && t.endsWith('**')) parent.append(h('b', null, t.slice(2, -2))); else if (t.length > 2 && t.startsWith('`') && t.endsWith('`')) parent.append(h('code', null, t.slice(1, -1))); else parent.append(document.createTextNode(t)); }); return parent; };
+  for (const raw of String(text).split('\n')) {
+    const line = raw.trimEnd(), ul = line.match(/^\s*[-*•]\s+(.*)/), ol = line.match(/^\s*\d+[.)]\s+(.*)/);
+    if (ul || ol) { const k = ul ? 'ul' : 'ol'; if (!list || kind !== k) { list = h(k); kind = k; box.append(list); } list.append(inline((ul || ol)[1], h('li'))); continue; }
+    list = null; if (line.trim()) box.append(inline(line, h('p')));
+  }
+  return box;
+}
+const hhmm = d => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+function chatMsgEl(m) {
+  if (m.role === 'user') return h('div', { class: 'msg user' }, h('div', { class: 'msg-col' }, h('div', { class: 'bub' }, m.text), h('div', { class: 'meta' }, hhmm(m.at))));
+  const av = h('span', { class: 'av', 'aria-hidden': 'true' }, icon('sparkle'));
+  if (m.role === 'typing') return h('div', { class: 'msg ai' }, av, h('div', { class: 'msg-col' }, h('div', { class: 'bub', role: 'status', 'aria-label': '답변 작성 중' }, h('span', { class: 'dots' }, h('i'), h('i'), h('i')))));
+  const act = m.error ? h('button', { class: 'link', type: 'button', onclick: () => chatRetry() }, '다시 시도') : h('button', { class: 'link', type: 'button', onclick: e => chatCopy(m.text, e.currentTarget) }, icon('copy'), '복사');
+  return h('div', { class: 'msg ai' }, av, h('div', { class: 'msg-col' }, h('div', { class: 'bub' + (m.error ? ' err' : '') }, m.error ? h('p', null, m.text) : chatRich(m.text)), h('div', { class: 'meta' }, hhmm(m.at), m.demo ? badge('데모 응답', 'warn') : null, act)));
+}
+function renderChatLog() {
+  const log = chatEls.log; log.replaceChildren();
+  if (!CHAT.msgs.length) log.append(h('div', { class: 'chat-empty' },
+    h('div', { class: 'hi' }, h('i', null, icon('sparkle')), h('b', null, '무엇을 도와드릴까요?'), h('span', null, '화면의 결과를 바탕으로 질문해 보세요.')),
+    h('div', { class: 'sugg' }, chatSuggestions().map(q => h('button', { type: 'button', onclick: () => chatSendMsg(q) }, icon('chat'), q)))));
+  else CHAT.msgs.forEach(m => log.append(chatMsgEl(m)));
+  log.scrollTop = log.scrollHeight;
+}
+function renderChatContext() {      // 화면이 바뀔 때마다 호출 (renderAll)
+  const c = chatEls.ctx, L = filtered(), sel = chatContext().selected;
+  const txt = `${TITLES[state.page]} · ${filterText()} · ${fmt.n(L.length)}개사${sel ? ` · 선택: ${sel.name}` : ''}`;
+  c.replaceChildren(
+    h('button', { class: 'chip', type: 'button', 'aria-pressed': String(CHAT.useCtx), title: '켜면 현재 화면 정보를 질문과 함께 보냅니다', onclick: () => { CHAT.useCtx = !CHAT.useCtx; renderChatContext(); } }, '현재 화면 포함'),
+    h('span', { class: 'txt', title: txt }, CHAT.useCtx ? txt : '화면 정보를 보내지 않음'));
+  if (!CHAT.msgs.length) renderChatLog();      // 처음 화면의 추천 질문은 화면 상태를 따라감
+}
+function renderChatHeader() { const api = chatApi(); $('#chat-name').textContent = (api && api.name) || 'AI 어시스턴트'; $('#chat-status').hidden = !!api; }
+function setChat(open, { focus = true } = {}) {
+  CHAT.open = open; const e = chatEls;
+  e.root.dataset.open = String(open); e.panel.setAttribute('aria-hidden', String(!open)); $('.app').classList.toggle('chat-open', open);
+  e.handle.setAttribute('aria-expanded', String(open)); e.handle.setAttribute('aria-label', open ? 'AI 대화 닫기' : 'AI 대화 열기');
+  if (open) { renderChatHeader(); renderChatContext(); renderChatLog(); if (focus) requestAnimationFrame(() => e.input.focus({ preventScroll: true })); }
+  else if (focus && e.panel.contains(document.activeElement)) e.handle.focus();
+}
+const chatAutosize = () => { const t = chatEls.input; t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 120) + 'px'; chatEls.send.disabled = CHAT.busy || !t.value.trim(); };
+const chatBusy = b => { CHAT.busy = b; chatAutosize(); };
+async function chatAsk(message) {
+  const api = chatApi(), history = CHAT.msgs.filter(m => m.role === 'user' || (m.role === 'assistant' && !m.error)).slice(0, -1).slice(-20).map(m => ({ role: m.role, text: m.text }));
+  const context = CHAT.useCtx ? chatContext() : null;
+  if (api) { const r = await api.ask({ message, history, context }), text = typeof r === 'string' ? r : r && r.text; if (!text) throw new Error('빈 답변'); return { text }; }
+  await new Promise(res => setTimeout(res, 750));
+  return { demo: true, text: `**사내 API가 아직 연결되지 않았습니다.**\n연결하면 이 자리에 답변이 표시됩니다.\n- 질문: ${message}\n- 함께 보낼 화면 정보: ${context ? `${context.screen} · ${filterText()} · ${fmt.n(context.count)}개사` : '없음'}` };
+}
+async function chatSendMsg(text) {
+  text = String(text || '').trim(); if (!text || CHAT.busy) return;
+  const gen = CHAT.gen, typing = { role: 'typing' };
+  CHAT.msgs.push({ role: 'user', text, at: new Date() }, typing); chatEls.input.value = ''; chatBusy(true); renderChatLog();
+  let reply;
+  try { const r = await chatAsk(text); reply = { role: 'assistant', text: r.text, demo: r.demo, at: new Date() }; }
+  catch (err) { reply = { role: 'assistant', text: '답변을 가져오지 못했습니다. 잠시 후 다시 시도해 주세요.', error: true, at: new Date() }; }
+  if (gen !== CHAT.gen) return;                  // 그 사이 '새 대화'를 눌렀으면 늦게 온 답변은 버림
+  CHAT.msgs.splice(CHAT.msgs.indexOf(typing), 1, reply); chatBusy(false); renderChatLog(); chatEls.live.textContent = reply.text;
+}
+function chatRetry() {
+  const last = [...CHAT.msgs].reverse().find(m => m.role === 'user'); if (!last) return;
+  CHAT.msgs = CHAT.msgs.filter(m => !(m.role === 'assistant' && m.error)); CHAT.msgs.splice(CHAT.msgs.lastIndexOf(last), 1); chatSendMsg(last.text);
+}
+async function chatCopy(text, btn) {
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) { const t = h('textarea', { style: 'position:fixed;opacity:0' }); t.value = text; document.body.append(t); t.select(); try { document.execCommand('copy'); } catch (e2) { /* 복사 불가 환경은 무시 */ } t.remove(); }
+  const old = btn.lastChild.textContent; btn.lastChild.textContent = '복사됨'; setTimeout(() => { btn.lastChild.textContent = old; }, 1200);
+}
+chatEls.handle.addEventListener('click', () => setChat(!CHAT.open));
+$('#chat-close').addEventListener('click', () => setChat(false));
+$('#chat-new').addEventListener('click', () => { CHAT.gen++; CHAT.msgs = []; chatBusy(false); renderChatLog(); chatEls.input.focus(); });
+chatEls.form.addEventListener('submit', e => { e.preventDefault(); chatSendMsg(chatEls.input.value); });
+chatEls.input.addEventListener('input', chatAutosize);
+chatEls.input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); chatSendMsg(chatEls.input.value); } });   // 한글 입력 중 Enter(조합 확정)는 전송하지 않음
+chatEls.panel.addEventListener('keydown', e => { if (e.key === 'Escape') { e.stopPropagation(); setChat(false); } });
+renderChatHeader(); chatAutosize();
+
+/* =====================================================================
+   11. 화면 전환 · 필터 · 테마 · 초기화
    ===================================================================== */
 const PAGES = ['report', 'area', 'company'];
 const TITLES = { report:'결과 요약', area:'항목별 결과', company:'협력사별 결과' };
@@ -884,9 +1122,10 @@ function renderAll() {
   const L = filtered(), empty = L.length === 0;
   $('#empty').hidden = !empty;
   PAGES.forEach(k => { $('#page-' + k).hidden = empty || k !== state.page; });
-  if (empty) { setLead('조건에 맞는 협력사가 없습니다.'); return; }
+  if (empty) { setLead('조건에 맞는 협력사가 없습니다.'); renderChatContext(); return; }
   if (!BUILT[state.page]) { BUILDERS[state.page](); BUILT[state.page] = true; }
   RENDERERS[state.page](L);
+  renderChatContext();                           // 화면이 정해진 뒤에 갱신 (선택 영역·선택 협력사가 이 안에서 정해짐)
 }
 function fillSelect(id, values) { $('#' + id).replaceChildren(h('option', { value:'' }, '전체'), ...values.map(v => h('option', { value: v }, v))); }
 fillSelect('f-org', CONFIG.orgs); fillSelect('f-region', CONFIG.regions.map(r => r.name)); fillSelect('f-inout', ['내자', '외자']);

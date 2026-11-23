@@ -87,8 +87,32 @@
   </div>
 </section>
 
-<section class="slide" data-chapter="8. 사례 해부" data-title="8.5 가져갈 뼈대, 바꿀 살">
-  <div class="hd"><span class="sec-no">8.5</span><h2 class="title">가져갈 뼈대, 바꿀 살</h2><p class="lead">내 대시보드에서는 무엇을 그대로 쓰고, 무엇을 바꾸나</p></div>
+<section class="slide" data-chapter="8. 사례 해부" data-title="8.5 AI 대화 패널 — 연결 자리만">
+  <div class="hd"><span class="sec-no">8.5</span><h2 class="title">AI 대화 패널 — 연결 자리만 두는 설계</h2></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col w3"><figure class="shot"><img src="{{img:shot_chat}}" alt="AI 대화 패널이 열린 화면">
+        <span class="pin s" style="left:75.4%;top:50%">1</span><span class="pin s" style="left:92.6%;top:8.2%">2</span>
+        <span class="pin s" style="left:80.2%;top:13.4%">3</span><span class="pin s" style="left:93.5%;top:55.5%">4</span></figure></div>
+      <div class="col w2">
+        <div class="legend" style="font-size:24px;gap:8px">
+          <div><span class="pin">1</span><span><b>손잡이</b> — 누르면 패널이 열림</span></div>
+          <div><span class="pin">2</span><span><b>"API 미연결"</b> — 연결 전엔 데모 답변</span></div>
+          <div><span class="pin">3</span><span><b>현재 화면 포함</b> — 화면 정보만 함께 전달</span></div>
+          <div><span class="pin">4</span><span><b>추천 질문</b> — 화면마다 달라짐</span></div>
+        </div>
+<pre class="code xs" data-lang="js">window.SUPPLIER_CHAT = {
+  name: '사내 AI',
+  ask: async (req) => '답변'
+};  // req = { message, history, context }</pre>
+        <div class="callout warn" style="font-size:24px;padding:14px 22px"><div class="t">호출 코드는 넣지 않는다</div>주소·키는 코드에 없고, <b><code>ask</code> 한 곳</b>만 비워 둡니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="8. 사례 해부" data-title="8.6 가져갈 뼈대, 바꿀 살">
+  <div class="hd"><span class="sec-no">8.6</span><h2 class="title">가져갈 뼈대, 바꿀 살</h2><p class="lead">내 대시보드에서는 무엇을 그대로 쓰고, 무엇을 바꾸나</p></div>
   <div class="bd">
     <div class="grid-2">
       <div class="card ok"><h3 class="ok-t">뼈대 — 그대로 가져갑니다</h3><ul class="b s"><li>빌드 4단계 + <b>점검 리포트</b></li><li>상태 1개 + <code>render()</code> 1회</li><li>카드 · 차트 · 표 부품</li><li>설정 파일로 기준 분리</li><li>정적 배포 + 보안 규칙</li><li>AI 협업 6단계 + 지시서 구조</li></ul></div>

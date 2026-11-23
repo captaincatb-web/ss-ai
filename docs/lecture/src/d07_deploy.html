@@ -1,0 +1,97 @@
+<!-- ═══════════ 7장 설정·배포 ═══════════ -->
+<section class="slide chapter" data-chapter="7. 설정·배포" data-title="7. 설정·배포 (5단계) — 기준은 설정으로, 공유는 정적으로">
+  <div class="ch-no">7</div><div class="ch-title">설정·배포</div><div class="ch-sub">5단계 — 기준은 설정 파일로,<br>공유는 정적 파일로</div><span class="ch-time">약 15분</span>
+  <ul class="ch-list"></ul>
+</section>
+
+<section class="slide" data-chapter="7. 설정·배포" data-title="7.1 바뀔 값은 설정 파일로">
+  <div class="hd"><span class="sec-no">7.1</span><h2 class="title">바뀔 값은 모두 설정 파일로</h2><p class="lead">기준이 바뀌면 코드가 아니라 <b>설정</b>을 고치고, 빌드를 다시 합니다</p></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col w3"><p class="cap">settings.js (실습 키트에서)</p>
+<pre class="code s" data-lang="js">window.SUPPLIER_SETTINGS = {
+  "title": "협력사 종합평가 (실습)",
+  // 등급 구간: 점수 이상이면 해당 등급, 그 외는 D
+  "gradeCut": { "A": 90, "B": 80, "C": 60 },
+  "target": 85,
+  "lowLine": 70,
+  "areas": ["품질", "납기", "원가", "대응", "기술"],
+  "columns": {
+    "score": ["종합 점수", "종합점수", "총점"]
+  }
+}</pre></div>
+      <div class="col w2">
+        <div class="card accent"><h3>설정에 들어갈 것</h3><p class="small">등급 구간 · 라벨 · 영역 이름 · 목표·기준선 · 열 동의어 · 임시 기준</p></div>
+        <div class="card warn"><h3>형식 규칙 (키트)</h3><p class="small">키·문자열은 큰따옴표, 마지막 쉼표 금지, 주석은 줄 맨 앞 <code>//</code>만</p></div>
+      </div>
+    </div>
+    <div class="callout warn"><div class="t">아직 확정되지 않은 기준은 "임시"로 표시합니다</div>이 사례의 부진사·우수사 후보 기준도 처음엔 임시였습니다. <b>임시 값 + 화면의 "임시 기준" 배지</b>로 시작하고, 확정되면 설정만 바꿉니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="7. 설정·배포" data-title="7.2 정적 배포 세 가지">
+  <div class="hd"><span class="sec-no">7.2</span><h2 class="title">정적 배포 세 가지 방법</h2></div>
+  <div class="bd">
+    <div class="grid-3">
+      <div class="card ok"><span class="tag ok">기본</span><h3 style="margin-top:8px">① 각자 PC에서 열기</h3><p class="small">저장소를 받아(<code>clone</code>) 본인 엑셀을 넣고 <b>빌드 → 열기</b>.</p><ul class="b xs mt-s"><li>데이터가 PC 밖으로 나가지 않음</li><li>각자 빌드가 필요</li></ul></div>
+      <div class="card accent"><span class="tag">공유</span><h3 style="margin-top:8px">② 사내 웹 서버·공유 폴더</h3><p class="small">담당자가 빌드한 <code>dist/</code>를 <b>복사</b>. 접근 제한은 서버에서.</p><ul class="b xs mt-s"><li>링크 하나로 공유</li><li>갱신 = 파일 교체</li></ul></div>
+      <div class="card warn"><span class="tag human">정책 확인 후</span><h3 style="margin-top:8px">③ 사내 GitHub Pages</h3><p class="small">발행 전용 브랜치에 <code>dist/</code>를 올려 페이지로.</p><ul class="b xs mt-s"><li>데이터를 저장소에 올려도 되는지</li><li>보기 권한을 제한할 수 있는지</li></ul></div>
+    </div>
+    <div class="callout"><div class="t">고르는 기준 질문 하나</div><b>데이터(<code>data.js</code>)가 저장소에 올라가도 되는가?</b> 확실하지 않으면 ①②를 씁니다. ③은 보안 정책을 확인한 뒤에만, 발행 전용 브랜치에 <b>이력 없이 덮어쓰는</b> 방식으로 합니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="7. 설정·배포" data-title="7.3 보안 규칙">
+  <div class="hd"><span class="sec-no">7.3</span><h2 class="title">보안 규칙 — 코드는 올리고, 데이터는 올리지 않는다</h2></div>
+  <div class="bd">
+    <div class="grid-2">
+      <div class="card danger"><h3 class="bad-t">하지 말 것</h3><ul class="b s"><li>원본 엑셀·CSV·<code>data/</code>를 저장소에 커밋</li><li>DRM 파일을 평문으로 변환해 배포</li><li>토큰·비밀번호를 <code>.js</code>/<code>.env</code>에 하드코딩</li><li>사내 데이터를 외부 CDN·외부 LLM에 전송</li></ul></div>
+      <div class="card ok"><h3 class="ok-t">할 것</h3><ul class="b s"><li><code>.gitignore</code>로 데이터 폴더·엑셀 제외</li><li>커밋 전 <b>데이터 포함 검사</b>(훅)</li><li>배포 대상은 빌드 산출물(<code>dist/</code>)만</li><li>공개 데모는 <b>가상 샘플</b>로 분리</li><li>서버에서는 사내망 + 접근 권한 뒤에</li></ul></div>
+    </div>
+    <div class="row top">
+      <div class="col"><p class="cap">.gitignore</p>
+<pre class="code s" data-lang="text">data/
+dist/
+build/
+*.xlsx
+*.xls
+.env</pre></div>
+      <div class="col w2"><div class="callout danger" style="margin-top:34px"><div class="t">사내 GitHub도 저장소입니다</div>접근 권한이 있으면 <b>이력까지</b> 보이고, 올린 파일은 지워도 되살릴 수 있습니다. 저장소 접근 권한과 <b>데이터 접근 권한은 다릅니다.</b></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="7. 설정·배포" data-title="7.4 갱신은 다섯 단계">
+  <div class="hd"><span class="sec-no">7.4</span><h2 class="title">갱신은 다섯 단계 — 경고 0건이 아니면 배포하지 않는다</h2></div>
+  <div class="bd">
+    <div class="chev">
+      <div><b>① 교체</b><span>엑셀 새 파일</span></div>
+      <div><b>② 빌드</b><span><code>python build.py</code></span></div>
+      <div><b>③ 점검</b><span>경고 0건?</span></div>
+      <div><b>④ 배포</b><span><code>dist/</code> 복사</span></div>
+      <div><b>⑤ 확인</b><span>숫자 3개 대조</span></div>
+    </div>
+    <div class="grid-2">
+      <div class="card accent"><h3>③ 점검에서 멈추는 규칙</h3><p class="small"><code>data_check.txt</code>의 경고가 1건이라도 있으면 <b>원인을 확인하기 전에는 배포하지 않습니다.</b> 엑셀을 고칠지, 규칙을 고칠지 먼저 정합니다.</p></div>
+      <div class="card accent"><h3>⑤ 확인은 눈으로</h3><p class="small">첫 화면의 숫자 3개(평균 · 협력사 수 · A 비율)를 <b>엑셀에서 직접 계산</b>한 값과 맞춰 봅니다.</p></div>
+    </div>
+    <div class="callout"><div class="t">갱신 주기를 정해 두세요</div>예: 평가가 확정된 날 · 매월 첫 영업일. 담당자와 대체자 이름을 README에 적어 둡니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="7. 설정·배포" data-title="7.5 서버로 옮길 때 확인할 것">
+  <div class="hd"><span class="sec-no">7.5</span><h2 class="title">서버로 옮길 때 확인할 것</h2><p class="lead">지금은 로컬, 나중에 서버 — 처음부터 이 규칙으로 만들면 코드를 고치지 않습니다</p></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col"><ul class="check" style="font-size:26px"><li><b>상대 경로만</b> — 하위 주소(<code>/dash/</code>)에서도 동작</li><li><b>일반 <code>&lt;script&gt;</code>만</b> — ES 모듈·<code>fetch</code>는 <code>file://</code>에서 막힘</li><li><b>UTF-8</b> — 파일 저장도, 서버 응답도</li><li><b>캐시</b> — <code>data.js?v=빌드시각</code>, 서버는 no-cache</li></ul></div>
+      <div class="col"><ul class="check" style="font-size:26px"><li><b>못 읽으면 오류 화면</b> — 샘플로 대신 보여 주지 않음</li><li><b>접근 제한</b> — 서버에서 설정(이 프로젝트는 로그인을 만들지 않음)</li><li><b>경로를 코드에 박지 않기</b> — 엑셀 위치는 <code>--data-dir</code> 인자</li><li><b>한글·공백 경로</b>에서도 빌드가 되는지</li></ul></div>
+    </div>
+    <div class="row top">
+      <div class="col w2"><p class="cap">올리기 전에 서버처럼 먼저 열어 보기</p>
+<pre class="code s" data-lang="sh">cd dist
+python -m http.server 8000
+# 브라우저에서 http://localhost:8000/ 로 확인</pre></div>
+      <div class="col w3"><div class="callout ok" style="margin-top:34px"><div class="t">같은 파일이 두 방식에서 똑같이 열려야 합니다</div>더블클릭(<code>file://</code>)과 서버(<code>http://</code>) 모두에서 첫 화면·필터·오류 화면을 확인하세요.</div></div>
+    </div>
+  </div>
+</section>

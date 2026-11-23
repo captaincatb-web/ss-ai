@@ -1,0 +1,148 @@
+<!-- ═══════════ 5장 빌드 ═══════════ -->
+<section class="slide chapter" data-chapter="5. 빌드" data-title="5. 빌드 (3단계) — 무거운 일은 빌드에서">
+  <div class="ch-no">5</div><div class="ch-title">빌드</div><div class="ch-sub">3단계 — 무거운 일은 빌드에서 끝내고,<br>화면에는 정리된 데이터만 넘깁니다</div><span class="ch-time">약 30분</span>
+  <ul class="ch-list"></ul>
+</section>
+
+<section class="slide" data-chapter="5. 빌드" data-title="5.1 빌드는 네 단계">
+  <div class="hd"><span class="sec-no">5.1</span><h2 class="title">빌드는 네 단계로 나눕니다</h2></div>
+  <div class="bd">
+    <div class="grid-4" style="gap:18px 24px">
+      <div class="card flat" style="grid-column:span 2;background:var(--warn-bg);border-color:var(--accent-2);text-align:center;padding:14px"><b style="font-size:29px;color:var(--warn)">원본을 믿지 않는 단계</b></div>
+      <div class="card flat" style="grid-column:span 2;background:var(--accent-bg);border-color:var(--accent);text-align:center;padding:14px"><b style="font-size:29px;color:var(--accent-ink)">화면이 쓰기 좋은 모양을 만드는 단계</b></div>
+      <div class="card orange"><span class="tag human">① Read</span><h3 style="margin-top:8px">읽기</h3><p class="small">엑셀을 <b>있는 그대로</b> 행 목록으로. 헤더 행 찾기 · 병합 풀기</p></div>
+      <div class="card orange"><span class="tag human">② Normalize</span><h3 style="margin-top:8px">정리</h3><p class="small">이름·숫자·빈칸을 정돈. 동의어 · 키 · 범위 점검</p></div>
+      <div class="card accent"><span class="tag ai">③ Compute</span><h3 style="margin-top:8px">계산</h3><p class="small">등급 · 순위 · 전년 연결 · 추이 · 가중 평균</p></div>
+      <div class="card accent"><span class="tag ai">④ Emit</span><h3 style="margin-top:8px">내보내기</h3><p class="small"><code>data.js</code> + 점검 리포트 + <code>dist/</code></p></div>
+    </div>
+    <div class="callout danger"><div class="t">섞으면 디버깅이 불가능합니다</div>읽으면서 계산하고, 계산하면서 고치면 <b>어디서 틀렸는지</b> 알 수 없습니다. 단계 사이의 중간 결과를 눈으로 볼 수 있어야 합니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="5. 빌드" data-title="5.2 모듈마다 책임은 하나">
+  <div class="hd"><span class="sec-no">5.2</span><h2 class="title">모듈마다 책임은 하나, 하지 않는 일도 정한다</h2></div>
+  <div class="bd">
+    <table class="t">
+      <tr><th style="width:250px">모듈(함수)</th><th>하는 일</th><th style="width:480px">하지 않는 일</th></tr>
+      <tr><td><code>read_excel</code></td><td>파일 열기 · 헤더 행 찾기 · 병합 풀기</td><td>값을 고치지 않는다</td></tr>
+      <tr><td><code>find_col</code> · <code>num</code></td><td>동의어로 열 찾기 · 숫자·빈칸 정리</td><td>계산하지 않는다</td></tr>
+      <tr><td><code>compute</code></td><td>등급 · 키 점검 · 전년 연결 · 추이</td><td>엑셀을 직접 읽지 않는다</td></tr>
+      <tr><td><code>emit</code></td><td><code>data.js</code> · 점검 리포트 · <code>dist/</code> 복사</td><td>숫자를 바꾸지 않는다</td></tr>
+      <tr><td><code>warn</code></td><td>경고를 모아서 보고</td><td>멈추지 않는다 (치명 오류만 중단)</td></tr>
+    </table>
+    <div class="callout"><div class="t">파일이 길어지면 이 경계로 쪼갭니다</div>실습 키트의 <code>build.py</code>는 한 파일(약 270줄)이지만 함수가 이 경계로 나뉘어 있습니다. 새 규칙은 <b>어느 함수에 들어갈지</b> 먼저 정합니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="5. 빌드" data-title="5.3 코드 골격">
+  <div class="hd"><span class="sec-no">5.3</span><h2 class="title">코드 골격 — 이것만 읽으면 흐름이 보입니다</h2><p class="lead">실습 키트 <code>build.py</code>에서 뽑은 부분입니다</p></div>
+  <div class="bd top">
+    <div><p class="cap">main() — 네 단계가 그대로 보인다</p>
+<pre class="code s" data-lang="py">def main():
+    S = read_settings(HERE / 'settings.js')           # 설정: 기준·열 이름
+    for f in folders:                                  # ① 읽기 — 연도 폴더마다
+        result, areas, _ = load_year(f, S)             #    헤더 행 · 병합 · 종류 판별
+        years[int(f.name)] = {'result': result, 'areas': areas}
+    model = compute(years, S)                          # ②③ 정리 + 계산 (경고도 여기서)
+    size = emit(model, out)                            # ④ data.js · 점검 리포트 · dist/
+    say('점검', f'경고 {len(WARNINGS)}건')              # 0건이 아니면 배포하지 않는다</pre></div>
+    <div class="row top">
+      <div class="col"><p class="cap">등급 계산은 한 곳에서만</p>
+<pre class="code s" data-lang="py">def grade_of(score, cut):
+    if score >= cut['A']: return 'A'
+    if score >= cut['B']: return 'B'
+    if score >= cut['C']: return 'C'
+    return 'D'</pre></div>
+      <div class="col"><p class="cap">숫자 정리 — 엑셀은 글자를 섞어 놓는다</p>
+<pre class="code s" data-lang="py">def num(v):    # '90%' ' 87점' → 숫자
+    if v in (None, ''): return None
+    if isinstance(v, (int, float)): return float(v)
+    t = re.sub(r'[^\d.\-]', '', str(v))
+    try: return float(t)
+    except ValueError: return None</pre></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="5. 빌드" data-title="5.4 계산 규칙은 한 곳에서">
+  <div class="hd"><span class="sec-no">5.4</span><h2 class="title">계산 규칙은 한 곳에서, 숫자로 고정합니다</h2></div>
+  <div class="bd">
+    <table class="t s">
+      <tr><th style="width:190px">규칙</th><th>정의</th><th style="width:560px">경계·예</th></tr>
+      <tr><td>등급</td><td>90 이상 A · 80 이상 B · 60 이상 C · 그 외 D</td><td>90.0→A · 89.9→B · 80.0→B · 79.9→C · 60.0→C · 59.9→D</td></tr>
+      <tr><td>증감 표기</td><td>▲ 1.3점 / ▼ 2.1점 / – 0.0점</td><td>반올림해서 0.0이면 회색 "– 0.0점"</td></tr>
+      <tr><td>순위</td><td>높은 순, <b>동점은 같은 순위</b>, 빈 값 제외</td><td>90 · 85 · 85 · 80 → 1 · 2 · 2 · 4</td></tr>
+      <tr><td>평균</td><td>빈 값은 제외하고 평균 (0으로 세지 않음)</td><td>[80, 빈칸, 90] → 85</td></tr>
+      <tr><td>가중 평균</td><td>가중치(거래비중 등)가 있으면 Σ(점수×비중) ÷ Σ(비중)</td><td>비중 합이 100이 아니면 경고</td></tr>
+      <tr><td>추이(코호트)</td><td>기준연도 평가 협력사 <b>집단</b>을 과거까지 따라간다</td><td>연도마다 대상이 달라도 같은 집단 비교</td></tr>
+    </table>
+    <div class="callout warn"><div class="t">엑셀에 등급이 이미 있다면?</div>어느 쪽을 믿을지 <b>정해 두고</b>(키트: 계산값 · 실제 프로젝트: 엑셀 값 우선) 서로 다르면 경고로 남깁니다. 규칙은 설정과 함수 한 곳에만 두고, 화면 코드에 <code>90</code> 같은 숫자를 박지 않습니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="5. 빌드" data-title="5.5 산출물은 dist/ 하나">
+  <div class="hd"><span class="sec-no">5.5</span><h2 class="title">산출물은 <code style="font-size:.9em">dist/</code> 폴더 하나</h2><p class="lead">이 폴더만 옮기면 어디서나 열립니다</p></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col w3"><p class="cap">빌드 후 dist/ (실습 키트)</p>
+<pre class="code" data-lang="text">dist/
+├─ index.html       <span class="c">화면 (data.js?v=빌드시각 으로 캐시 방지)</span>
+├─ settings.js      <span class="c">기준·열 이름 (설정 복사본)</span>
+├─ data.js          <span class="c">window.__DATA__ = {…}  ← 화면이 읽는 데이터</span>
+└─ data_check.txt   <span class="c">점검 리포트</span></pre>
+        <p class="cap mt-s">실제 프로젝트에서는 이렇게 늘어납니다</p>
+<pre class="code s" data-lang="text">styles.css · app.js      <span class="c">화면 코드를 파일로 분리</span>
+data_check.html          <span class="c">보기 좋은 점검 리포트</span>
+chat-adapter.js          <span class="c">AI 대화를 연결할 때만</span></pre></div>
+      <div class="col w2">
+        <div class="card accent"><h3>왜 JS 파일인가</h3><p class="small"><code>file://</code>(더블클릭)에서는 <code>fetch</code>로 JSON을 읽을 수 없어서 <code>data.js</code>를 <code>&lt;script&gt;</code>로 읽습니다.</p></div>
+        <div class="card ok"><h3>같은 파일, 어디서나</h3><p class="small">더블클릭으로도, 서버에 올려도 <b>코드 수정 없이</b> 똑같이 동작합니다.</p></div>
+        <div class="card danger"><h3>못 읽으면 오류 화면</h3><p class="small"><code>data.js</code>가 없으면 샘플로 <b>대신 보여 주지 않고</b> 원인을 알려 줍니다.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="5. 빌드" data-title="5.6 품질 리포트">
+  <div class="hd"><span class="sec-no">5.6</span><h2 class="title">빌드 성공 ≠ 데이터 정상 — 점검 리포트</h2></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col w3"><p class="cap">일부러 문제 5가지를 섞은 엑셀로 빌드한 결과</p>
+<pre class="code xs" data-lang="text">[읽기] 2026/영역점수.xlsx → 영역점수, 헤더 2행, 199행
+[읽기] 2026/평가결과.xlsx → 평가결과, 헤더 3행, 201행
+<span class="w">[경고] 협력사 코드가 없는 행 1개 → 제외했습니다.</span>
+<span class="w">[경고] 협력사 코드가 중복된 행 1개 → 처음 나온 행만 사용했습니다.</span>
+<span class="w">[경고] 점수가 비었거나 0~100 밖인 행 1개 → 제외했습니다.</span>
+<span class="w">[경고] 엑셀의 등급과 점수로 계산한 등급이 다른 협력사 1개
+       (예: S0020(85.0점: 엑셀 A ≠ 계산 B)) → 계산한 등급을 씁니다.</span>
+<span class="w">[경고] 키 불일치: 평가결과에만 있음 1개 ['S0030'],
+       영역점수에만 있음 2개 ['S0004', 'S0011']</span>
+[정리] 기준연도 2026 · 협력사 198개 · 추이 자료 2/5개년 [2025, 2026]
+[정답값] 평균 80.8점(전년 80.5) · A 30 / B 77 / C 90 / D 1
+<span class="e">[점검] 경고 5건</span></pre></div>
+      <div class="col w2">
+        <div class="card ok"><h3>읽는 법</h3><ul class="b s"><li><b>경고 0건</b> = 배포해도 좋다</li><li>1건 이상 = <b>원인 확인 전 배포 금지</b></li><li>행 수는 엑셀과 대조</li><li>정답값은 기대값과 대조</li></ul></div>
+        <div class="callout warn" style="font-size:25px"><div class="t">경고 하나가 다른 경고를 낳기도 합니다</div>점수 범위 밖으로 제외된 행이 "영역점수에만 있음"으로도 나옵니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="5. 빌드" data-title="5.7 같은 입력은 같은 결과, 정답값">
+  <div class="hd"><span class="sec-no">5.7</span><h2 class="title">같은 입력은 같은 결과 — 그리고 정답값</h2></div>
+  <div class="bd">
+    <div class="grid-3">
+      <div class="card accent"><h3>멱등성</h3><p>빌드를 <b>몇 번 돌려도</b> 같은 결과. 바뀌는 것은 갱신 시각뿐입니다.</p></div>
+      <div class="card accent"><h3>결정성</h3><p>가상 샘플은 <b>시드를 고정</b>해서 만듭니다. 누가 만들어도 같은 숫자가 나옵니다.</p></div>
+      <div class="card orange"><h3>정답값(골든 값)</h3><p>가상 샘플의 <b>정답 숫자</b>를 적어 두고, 만든 결과와 대조합니다.</p></div>
+    </div>
+    <div class="flow">
+      <div class="node"><b>가상 샘플</b><span>시드 고정</span></div><div class="arrow">→</div>
+      <div class="node"><b>엑셀로 저장</b><span>실제와 같은 헤더 구조</span></div><div class="arrow">→</div>
+      <div class="node hl"><b>build</b><span>읽기 → … → 내보내기</span></div><div class="arrow">→</div>
+      <div class="node"><b>화면 숫자</b><span>평균 · 등급 개수</span></div><div class="arrow">=</div>
+      <div class="node hl2"><b>정답값?</b><span>다르면 규칙 오류</span></div>
+    </div>
+    <div class="callout"><div class="t">예: 이 사례의 정답값 (가상 샘플)</div>평균 <b>82.9점</b> (전년 81.6) · 등급 A <b>211</b> / B <b>648</b> / C <b>372</b> / D <b>17</b> — AI가 만든 화면이 이 숫자와 다르면 <b>구현이 어긋난 것</b>입니다.</div>
+  </div>
+</section>

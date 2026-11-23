@@ -1,0 +1,116 @@
+<!-- ═══════════ 표지 · 목차 · 목표 · 완성품 ═══════════ -->
+<section class="slide cover" data-chapter="" data-title="표지">
+  <div class="kicker">실습형 교육 · 데이터 담당자·운영자 대상</div>
+  <h1>엑셀로 만드는<br>정적 대시보드</h1>
+  <div class="sub">AI와 함께 설계부터 배포까지 — 협력사 종합평가 사례로 따라 하기</div>
+  <div class="bar"></div>
+  <div class="meta"><span>개발 경험 없어도 됩니다</span><span>약 4시간 (설명 150분 + 실습 90분)</span><span>가상 샘플 데이터 · 실습 키트 제공</span></div>
+  <div class="moto">무거운 일은 빌드에서 끝내고,<br>브라우저는 그림만 그린다.</div>
+  <div class="keys">← → 이동 · O 전체 보기 · T 다크 모드 · F 전체 화면 · 1~9 장 이동</div>
+</section>
+
+<section class="slide" data-chapter="시작" data-title="목차">
+  <div class="hd"><h2 class="title">오늘 배울 순서</h2><p class="lead">설계 → 데이터 → 빌드 → 화면 → 배포, 그리고 마지막에 직접 만들어 봅니다</p></div>
+  <div class="bd"><div class="toc-grid">
+    <a class="toc-card" data-ch="1" href="#"><div class="toc-head"><div class="toc-badge">1</div><span class="pg"></span></div><div class="toc-title">준비</div><div class="toc-desc">도구 3가지 확인 · 데이터 약속 4가지</div></a>
+    <a class="toc-card" data-ch="2" href="#"><div class="toc-head"><div class="toc-badge">2</div><span class="pg"></span></div><div class="toc-title">원리와 작업 흐름</div><div class="toc-desc">서버 없이 되는 이유 · AI와 나눠 만드는 법</div></a>
+    <a class="toc-card" data-ch="3" href="#"><div class="toc-head"><div class="toc-badge">3</div><span class="pg"></span></div><div class="toc-title">설계</div><div class="toc-desc">질문 → KPI → 화면 · 화면 정의서</div></a>
+    <a class="toc-card" data-ch="4" href="#"><div class="toc-head"><div class="toc-badge">4</div><span class="pg"></span></div><div class="toc-title">데이터 계약</div><div class="toc-desc">열 이름·키·단위 · 동의어 · 1개년부터</div></a>
+    <a class="toc-card" data-ch="5" href="#"><div class="toc-head"><div class="toc-badge">5</div><span class="pg"></span></div><div class="toc-title">빌드</div><div class="toc-desc">읽기 → 정리 → 계산 → 내보내기 · 점검</div></a>
+    <a class="toc-card" data-ch="6" href="#"><div class="toc-head"><div class="toc-badge">6</div><span class="pg"></span></div><div class="toc-title">화면</div><div class="toc-desc">상태 + render · 차트·표 · 드릴다운</div></a>
+    <a class="toc-card" data-ch="7" href="#"><div class="toc-head"><div class="toc-badge">7</div><span class="pg"></span></div><div class="toc-title">설정·배포</div><div class="toc-desc">설정 파일 · 정적 배포 3가지 · 보안</div></a>
+    <a class="toc-card" data-ch="8" href="#"><div class="toc-head"><div class="toc-badge">8</div><span class="pg"></span></div><div class="toc-title">사례 해부</div><div class="toc-desc">완성된 대시보드를 읽고 뜯어 보기</div></a>
+    <a class="toc-card" data-ch="9" href="#"><div class="toc-head"><div class="toc-badge">9</div><span class="pg"></span></div><div class="toc-title">실습</div><div class="toc-desc">실습 키트로 내 대시보드 만들기</div></a>
+  </div></div>
+</section>
+
+<section class="slide" data-chapter="시작" data-title="오늘의 목표">
+  <div class="hd"><h2 class="title">오늘 끝나면, 내 엑셀로 내 대시보드를 만듭니다</h2></div>
+  <div class="bd">
+    <div class="flow">
+      <div class="node hl2"><b>내 엑셀</b><span>지금 쓰는 양식 그대로</span></div>
+      <div class="arrow">→</div>
+      <div class="node hl"><b>빌드 1줄</b><span><code>python build.py</code></span></div>
+      <div class="arrow">→</div>
+      <div class="node hl2"><b>내 대시보드</b><span>더블클릭하면 열리는 <code>index.html</code></span></div>
+    </div>
+    <div class="grid-3">
+      <div class="card accent"><h3>설계</h3><p>질문에서 출발해 어떤 숫자를 어떤 화면에 보여 줄지 <b>정합니다</b>.</p></div>
+      <div class="card accent"><h3>빌드</h3><p>엑셀을 믿지 않고 읽어서 정리·계산한 뒤 <code>data.js</code> 한 파일로 <b>만듭니다</b>.</p></div>
+      <div class="card accent"><h3>화면</h3><p><code>data.js</code>를 읽어 차트·표를 <b>그리고</b>, 필터로 드릴다운합니다.</p></div>
+    </div>
+    <div class="callout ok"><div class="t">선수 지식은 필요 없습니다</div>코드는 AI가 쓰고, 사람은 <b>정하고 검수</b>합니다. 코드를 읽을 수만 있으면 충분합니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="시작" data-title="완성품 미리보기">
+  <div class="hd"><h2 class="title">이런 화면을 만듭니다</h2><p class="lead">협력사 종합평가 대시보드 — 화면 3개, 모두 가상 샘플 데이터입니다</p></div>
+  <div class="bd">
+    <div class="grid-3">
+      <div class="col"><figure class="shot"><img src="{{img:shot_report}}" alt="결과 요약 화면"></figure><div><h3 style="margin:0 0 4px;font-size:32px;color:var(--title)">결과 요약</h3><div class="dim" style="font-size:26px;line-height:1.4">경영진 · 1분 안에 상황 파악<br>핵심 숫자 4개 + 결론 3줄</div></div></div>
+      <div class="col"><figure class="shot"><img src="{{img:shot_area}}" alt="항목별 결과 화면"></figure><div><h3 style="margin:0 0 4px;font-size:32px;color:var(--title)">항목별 결과</h3><div class="dim" style="font-size:26px;line-height:1.4">담당자 · 어느 영역·항목이 약한가<br>영역 → 평가항목 → 하위 협력사</div></div></div>
+      <div class="col"><figure class="shot"><img src="{{img:shot_company}}" alt="협력사별 결과 화면"></figure><div><h3 style="margin:0 0 4px;font-size:32px;color:var(--title)">협력사별 결과</h3><div class="dim" style="font-size:26px;line-height:1.4">리뷰 · 한 협력사의 5개년 추이<br>항목별 점수와 순위</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 1장 준비 ═══════════ -->
+<section class="slide chapter" data-chapter="1. 준비" data-title="1. 준비 — 환경과 약속">
+  <div class="ch-no">1</div><div class="ch-title">준비</div><div class="ch-sub">도구 3가지를 확인하고,<br>데이터 약속 4가지를 먼저 정합니다</div><span class="ch-time">약 10분</span>
+  <ul class="ch-list"></ul>
+</section>
+
+<section class="slide" data-chapter="1. 준비" data-title="1.1 필요한 것은 세 가지">
+  <div class="hd"><span class="sec-no">1.1</span><h2 class="title">필요한 것은 세 가지입니다</h2></div>
+  <div class="bd">
+    <div class="grid-3">
+      <div class="card accent"><span class="tag">1</span><h3 style="margin-top:8px">Python 3.8 이상</h3><p>엑셀을 읽는 빌드 스크립트가 씁니다. 엑셀 읽기용 <code>openpyxl</code> 패키지가 함께 필요합니다.</p></div>
+      <div class="card accent"><span class="tag">2</span><h3 style="margin-top:8px">브라우저</h3><p>Chrome 또는 Edge. 만든 화면을 여는 곳입니다. <b>서버도 인터넷도 필요 없습니다.</b></p></div>
+      <div class="card accent"><span class="tag">3</span><h3 style="margin-top:8px">AI 코딩 도구</h3><p>사내 opencode. 코드를 쓰고 고칩니다. 사람은 <b>정하고 검수</b>합니다.</p></div>
+    </div>
+    <div class="row top">
+      <div class="col w3"><p class="cap">작업 폴더는 이렇게 생깁니다</p>
+<pre class="code" data-lang="text">my-dashboard/
+├─ data/2026/      <span class="c">← 엑셀을 넣는 곳 (저장소에 올리지 않음)</span>
+├─ build.py        <span class="c">← 엑셀 → dist/</span>
+├─ settings.js     <span class="c">← 기준·열 이름 설정</span>
+├─ src/index.html  <span class="c">← 화면</span>
+└─ dist/           <span class="c">← 결과 (이 폴더만 옮기면 됨)</span></pre></div>
+      <div class="col w2"><div class="callout warn"><div class="t">설치는 사내 표준 안내를 따르세요</div>설치 방법·미러 주소는 환경마다 다릅니다.<br><b class="warn-t">[사내 설치 안내 링크 · 담당자]</b>를<br>여기에 적어 두세요.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="1. 준비" data-title="1.2 설치 확인 3체크">
+  <div class="hd"><span class="sec-no">1.2</span><h2 class="title">설치 확인 — 세 가지가 모두 되면 다음으로</h2></div>
+  <div class="bd">
+    <div class="row top">
+      <div class="col w3"><p class="cap">터미널(명령 프롬프트 · PowerShell)에서</p>
+<pre class="code" data-lang="text"><span class="c"># ① 파이썬</span>
+python --version
+<span class="ok">Python 3.12.1</span>           <span class="c">← 3.8 이상이면 OK</span>
+
+<span class="c"># ② 엑셀 읽기 패키지</span>
+python -c "import openpyxl; print(openpyxl.__version__)"
+<span class="ok">3.1.5</span>                     <span class="c">← 숫자가 나오면 OK</span>
+
+<span class="c"># ③ 브라우저: 아무 .html 파일을 끌어다 놓기</span>
+<span class="ok">→ 화면이 열리면 OK</span></pre></div>
+      <div class="col w2">
+        <div class="card warn"><h3>안 될 때</h3><ul class="b s"><li><code>python</code>이 없다고 나오면<br><code>py --version</code> (Windows)<br><code>python3 --version</code> (Mac)</li><li><code>openpyxl</code>이 없다면<br><code>pip install openpyxl</code> (사내 패키지 미러)</li><li>그래도 안 되면 사내 설치 안내 · 담당자</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="1. 준비" data-title="1.3 시작 전 약속 4가지">
+  <div class="hd"><span class="sec-no">1.3</span><h2 class="title">시작 전에 약속 4가지</h2><p class="lead">교육 내내, 그리고 실제 업무에서도 똑같이 지킵니다</p></div>
+  <div class="bd">
+    <div class="grid-2">
+      <div class="card ok"><h3>① 연습은 가상 데이터로</h3><p>실제 데이터는 사내 PC 밖으로 나가지 않습니다. 오늘은 실습 키트의 가상 엑셀만 씁니다.</p></div>
+      <div class="card ok"><h3>② 엑셀·data.js는 저장소에 올리지 않는다</h3><p>한 번 올린 파일은 지워도 이력에 남습니다. 사내 GitHub도 마찬가지입니다.</p></div>
+      <div class="card ok"><h3>③ AI에게는 열 이름과 규칙만</h3><p>업체명·점수 같은 <b>내용</b>은 붙여 넣지 않습니다. 열 이름도 사내 용어이면 사내 AI 도구에만 알려 줍니다.</p></div>
+      <div class="card ok"><h3>④ 외부 연결 없이 만든다</h3><p>CDN·웹폰트·외부 API를 쓰지 않습니다. 인터넷이 끊겨도 열려야 합니다.</p></div>
+    </div>
+  </div>
+</section>

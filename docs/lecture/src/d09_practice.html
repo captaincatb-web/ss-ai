@@ -1,0 +1,87 @@
+<!-- ═══════════ 9장 실습 ═══════════ -->
+<section class="slide chapter" data-chapter="9. 실습" data-title="9. 실습 — 내 대시보드 만들기">
+  <div class="ch-no">9</div><div class="ch-title">실습</div><div class="ch-sub">실습 키트로<br>내 대시보드를 만들어 봅니다</div><span class="ch-time">약 90분</span>
+  <ul class="ch-list"></ul>
+</section>
+
+<section class="slide" data-chapter="9. 실습" data-title="9.1 실습 6스텝">
+  <div class="hd"><span class="sec-no">9.1</span><h2 class="title">실습 6스텝 — 실습 키트(<code style="font-size:.85em">starter/</code>)</h2></div>
+  <div class="bd">
+    <table class="t s">
+      <tr><th style="width:56px">#</th><th style="width:250px">할 일</th><th style="width:640px">명령 · 동작</th><th>이렇게 나오면 성공</th></tr>
+      <tr><td>1</td><td>가상 엑셀 만들기</td><td><code>python make_sample.py</code></td><td><code>data/2026/</code>에 엑셀 2개</td></tr>
+      <tr><td>2</td><td>빌드</td><td><code>python build.py</code></td><td><b>경고 0건</b> · 평균 80.8 · A 30 / B 77 / C 92 / D 1</td></tr>
+      <tr><td>3</td><td>열기</td><td><code>dist/index.html</code> 더블클릭</td><td>KPI 4 + 차트 3 + 표 · 추이 <b>자료 2/5개년</b></td></tr>
+      <tr><td>4</td><td>점검 연습</td><td><code>python make_sample.py --dirty</code> → 빌드</td><td><b>경고 5건</b> → 리포트에서 5가지를 찾아 설명</td></tr>
+      <tr><td>5</td><td>열 이름 바꿔 보기</td><td>엑셀의 '종합 점수'를 '총점수'로 → 빌드 → 오류 → <code>settings.js</code>에 동의어 추가 → 빌드</td><td>오류 안내를 읽고 <b>스스로 고쳐서</b> 통과</td></tr>
+      <tr><td>6</td><td>과거 연도 채우기</td><td><code>python make_sample.py --add-year 2025</code> → 빌드 (2024·2023·2022도)</td><td>배지 3/5 → <b>5/5</b>, 배지가 사라짐</td></tr>
+    </table>
+    <div class="callout warn"><div class="t">4번을 하고 나면 data/가 "문제 있는" 파일로 바뀝니다</div><code>data/</code> 폴더를 지우고 1번부터 다시 하면 되돌아갑니다. 파이썬 버전이 다르면 정답값이 조금 다를 수 있으니, 그때는 <b>첫 실행 결과를 기준</b>으로 삼으세요.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="9. 실습" data-title="9.2 완성 화면과 체크리스트">
+  <div class="hd"><span class="sec-no">9.2</span><h2 class="title">완성 화면과 체크리스트</h2></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col" style="flex:none;width:860px"><figure class="shot"><img src="{{img:shot_starter}}" alt="실습 키트 완성 화면"><figcaption>스텝 3 완료 화면 (기대 결과)</figcaption></figure></div>
+      <div class="col"><ul class="check" style="font-size:26px;gap:12px">
+        <li>설치 3체크 통과 (1.2)</li>
+        <li>빌드 <b>경고 0건</b>, 정답값 일치</li>
+        <li><code>index.html</code> 더블클릭으로 열리고 필터·검색·정렬 동작</li>
+        <li>추이 카드에 <b>"자료 2/5개년"</b> 배지</li>
+        <li>점검 연습: 경고 5건의 원인을 설명할 수 있다</li>
+        <li>열 이름을 바꾼 뒤 <code>settings.js</code>에 <b>동의어를 추가</b>해 통과</li>
+        <li>과거 연도를 추가하면 배지가 올라가고 5/5에서 사라진다</li>
+        <li><code>dist/</code>를 <b>다른 폴더로 복사</b>해도 열린다</li>
+        <li><code>data.js</code> 이름을 바꿔 열면 <b>오류 화면</b> (샘플로 대체 안 됨)</li>
+        <li><code>.gitignore</code>에 <code>data/</code> <code>dist/</code> 포함</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="9. 실습" data-title="9.3 함정과 FAQ">
+  <div class="hd"><span class="sec-no">9.3</span><h2 class="title">자주 막히는 곳 — 함정과 FAQ</h2></div>
+  <div class="bd">
+    <div class="qa" style="gap:10px">
+      <div class="q" style="padding:12px 24px"><b style="font-size:25px">빌드는 성공했는데 숫자가 이상해요</b><span style="font-size:23px"><b>점검 리포트</b>부터: 경고 · 행 수 · 정답값 순서로 확인</span></div>
+      <div class="q" style="padding:12px 24px"><b style="font-size:25px">더블클릭했는데 빈 화면이에요</b><span style="font-size:23px">오류 화면의 안내대로 <code>data.js</code>가 <code>index.html</code>과 같은 폴더인지, 빌드했는지 확인</span></div>
+      <div class="q" style="padding:12px 24px"><b style="font-size:25px">한글이 깨져요</b><span style="font-size:23px">저장은 <b>UTF-8(BOM 없음)</b>. PowerShell 5.1의 <code>Set-Content -Encoding UTF8</code>은 BOM을 붙입니다</span></div>
+      <div class="q" style="padding:12px 24px"><b style="font-size:25px">엑셀을 열어 둔 채 빌드했어요</b><span style="font-size:23px"><code>~$</code> 임시 파일은 건너뜁니다. 저장하고 닫은 뒤 다시, 안 되면 복사본으로</span></div>
+      <div class="q" style="padding:12px 24px"><b style="font-size:25px">열 이름이 바뀌었어요</b><span style="font-size:23px">오류가 알려 주는 <b>비슷한 이름</b>을 <code>settings.js</code> columns에 동의어로 추가</span></div>
+      <div class="q" style="padding:12px 24px"><b style="font-size:25px">과거 연도를 넣었는데 영역 추이가 비어요</b><span style="font-size:23px">과거 연도 ①만 있으면 <b>점수·등급 추이</b>만 채워집니다. 영역 추이는 ②도 필요</span></div>
+      <div class="q" style="padding:12px 24px"><b style="font-size:25px">서버에 올렸더니 빈 화면이에요</b><span style="font-size:23px">상대 경로 · <code>.js</code> UTF-8 · 캐시 · <code>data.js</code>를 올렸는지 · 접근 권한</span></div>
+      <div class="q" style="padding:12px 24px;border-color:var(--danger)"><b style="font-size:25px">엑셀을 저장소에 올려 버렸어요</b><span style="font-size:23px"><b class="bad-t">즉시 담당자에게 알리세요.</b> 지워도 이력에 남으므로 이력 삭제는 담당자가 합니다</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="9. 실습" data-title="9.4 확인 퀴즈">
+  <div class="hd"><span class="sec-no">9.4</span><h2 class="title">확인 퀴즈 — 6문항</h2><p class="lead">먼저 답을 말해 본 뒤, 키를 눌러 정답을 하나씩 확인합니다</p></div>
+  <div class="bd">
+    <div class="qa" style="gap:12px">
+      <div class="q" style="padding:14px 26px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)"><b style="font-size:26px">① 90.0점은 몇 등급? 89.9점은?</b><span class="fragment" style="font-size:25px;color:var(--accent-ink);font-weight:700">A, B — 경계값은 테스트로 고정합니다</span></div>
+      <div class="q" style="padding:14px 26px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)"><b style="font-size:26px">② 점수 칸이 비어 있으면 평균은?</b><span class="fragment" style="font-size:25px;color:var(--accent-ink);font-weight:700">0으로 세지 않고 <u>제외</u> (빈칸 = 없음)</span></div>
+      <div class="q" style="padding:14px 26px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)"><b style="font-size:26px">③ 경고가 1건 나왔다. 배포해도 될까?</b><span class="fragment" style="font-size:25px;color:var(--accent-ink);font-weight:700">아니요 — 원인을 확인하기 전에는 배포하지 않는다</span></div>
+      <div class="q" style="padding:14px 26px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)"><b style="font-size:26px">④ 과거 연도를 넣었는데 영역 추이가 비어 있다</b><span class="fragment" style="font-size:25px;color:var(--accent-ink);font-weight:700">그 해의 ②(영역점수) 파일이 필요하다</span></div>
+      <div class="q" style="padding:14px 26px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)"><b style="font-size:26px">⑤ <code>data.js</code>를 못 읽으면 화면은?</b><span class="fragment" style="font-size:25px;color:var(--accent-ink);font-weight:700">원인을 알려 주는 오류 화면 (샘플로 대신 보여 주지 않는다)</span></div>
+      <div class="q" style="padding:14px 26px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)"><b style="font-size:26px">⑥ AI에게 줘도 되는 것은?</b><span class="fragment" style="font-size:25px;color:var(--accent-ink);font-weight:700">열 이름·규칙(사내 도구) — 업체명·점수 같은 <u>내용</u>은 안 됨</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="9. 실습" data-title="9.5 내 업무로 가져가기">
+  <div class="hd"><span class="sec-no">9.5</span><h2 class="title">다음 단계 — 내 업무로 가져가기</h2></div>
+  <div class="bd">
+    <div class="steps" style="gap:22px">
+      <div class="step"><div class="no">1</div><div><b>내 질문 3개 → 화면 정의서 한 장</b><p>누가 무엇을 결정하려고 보는가 (3장)</p></div></div>
+      <div class="step"><div class="no">2</div><div><b>내 엑셀의 열 이름을 표로 → 계약</b><p>열 이름 · 키 · 단위 · 허용 값 · 빈칸의 뜻 (4장)</p></div></div>
+      <div class="step"><div class="no">3</div><div><b>가상 데이터 목업 → 구현 지시서 → 사내 AI 도구로 구현</b><p>정답값으로 검수하고, 경고 0건이면 배포 (2·5·7장)</p></div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card accent"><h3>더 해 볼 주제</h3><p class="small">여러 연도 추이와 코호트 · 순위와 드릴다운 · 임시 기준 배지 · AI 대화 패널 연결 · 서버 배포</p></div>
+      <div class="card warn"><h3>도움 받는 곳</h3><p class="small"><b class="warn-t">[담당자 · 문의 채널]</b><br><b class="warn-t">[실습 키트·교육 자료 위치]</b> 를 여기에 적어 두세요.</p></div>
+    </div>
+  </div>
+</section>

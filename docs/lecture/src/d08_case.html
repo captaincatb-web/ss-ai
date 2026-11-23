@@ -1,0 +1,99 @@
+<!-- ═══════════ 8장 사례 해부 ═══════════ -->
+<section class="slide chapter" data-chapter="8. 사례 해부" data-title="8. 참고 사례 — 이 대시보드 해부">
+  <div class="ch-no">8</div><div class="ch-title">사례 해부</div><div class="ch-sub">완성된 대시보드를<br>읽고 뜯어 봅니다</div><span class="ch-time">약 10분</span>
+  <ul class="ch-list"></ul>
+</section>
+
+<section class="slide" data-chapter="8. 사례 해부" data-title="8.1 빠른 투어 — 모든 화면 공통">
+  <div class="hd"><span class="sec-no">8.1</span><h2 class="title">빠른 투어 ① — 화면 위쪽은 모두 같습니다</h2></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col w3"><figure class="shot"><img src="{{img:shot_report}}" alt="결과 요약 화면">
+        <span class="pin s" style="left:13%;top:15%">1</span><span class="pin s" style="left:15.6%;top:13.2%;display:none">2</span>
+        <span class="pin s" style="left:58%;top:15.6%">2</span><span class="pin s" style="left:87.2%;top:4.2%">3</span>
+        <span class="pin s" style="left:96.6%;top:33%">4</span><span class="pin s" style="left:15.8%;top:46.5%">5</span><span class="pin s" style="left:97.4%;top:50%">6</span></figure></div>
+      <div class="col w2"><div class="legend">
+        <div><span class="pin">1</span><span><b>메뉴</b> — 화면 3개를 오갑니다</span></div>
+        <div><span class="pin">2</span><span><b>필터 줄</b> — 모든 화면에 적용. 고르면 "적용 중 필터" 칩</span></div>
+        <div><span class="pin">3</span><span><b>상세 보기 · 다크 모드</b> — 핵심만 ↔ 상세</span></div>
+        <div><span class="pin">4</span><span><b>결론 3줄</b> — 가장 먼저 읽는 문장</span></div>
+        <div><span class="pin">5</span><span><b>핵심 숫자</b> — 점수 + 전년 대비 + 추이</span></div>
+        <div><span class="pin">6</span><span><b>AI 손잡이</b> — 오른쪽 대화 패널을 엽니다</span></div>
+      </div></div>
+    </div>
+    <p class="dim small">※ 가상 샘플 데이터 화면입니다 (협력사 1,248개 · 임의 생성)</p>
+  </div>
+</section>
+
+<section class="slide" data-chapter="8. 사례 해부" data-title="8.2 빠른 투어 — 결과 요약 읽는 순서">
+  <div class="hd"><span class="sec-no">8.2</span><h2 class="title">빠른 투어 ② — 결과 요약은 위에서 아래로</h2></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col w2"><div class="steps">
+        <div class="step"><div class="no">1</div><div><b>결론 3줄</b><p>평균·등급 구성·가장 약한 영역</p></div></div>
+        <div class="step"><div class="no">2</div><div><b>핵심 숫자 4개</b><p>평균 · A 비율 · C·D 비율 · 명단 수 (+전년)</p></div></div>
+        <div class="step"><div class="no">3</div><div><b>등급 결과</b><p>등급별 협력사 수와 비율, 올해 vs 전년</p></div></div>
+        <div class="step"><div class="no">4</div><div><b>5개년 추이</b><p>평균 점수 · 등급 구성의 흐름</p></div></div>
+        <div class="step"><div class="no">5</div><div><b>항목별 점수 증감</b><p>영역 → 평가항목으로 펼치며 확인</p></div></div>
+        <div class="step"><div class="no">6</div><div><b>변화가 큰 곳 · 명단</b><p>업종·협력사 TOP, 부진사·우수사 후보</p></div></div>
+      </div></div>
+      <div class="col w3">
+        <div class="crop"><img src="{{img:shot_report}}" alt="결론 3줄과 핵심 숫자" style="margin-top:-12.6%;margin-bottom:-24%"></div>
+        <div class="crop"><img src="{{img:shot_report}}" alt="등급 결과" style="margin-top:-38%"></div>
+        <div class="callout" style="font-size:25px"><div class="t">읽는 요령</div>위에서 <b>결론 → 숫자 → 근거</b> 순서로 내려갑니다. 모든 카드는 같은 필터를 따릅니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="8. 사례 해부" data-title="8.3 숫자를 읽는 규칙">
+  <div class="hd"><span class="sec-no">8.3</span><h2 class="title">숫자를 읽는 규칙 — 오해 방지</h2></div>
+  <div class="bd">
+    <table class="t s">
+      <tr><th style="width:700px">이렇게 읽지 마세요</th><th>이렇게 읽으세요</th></tr>
+      <tr><td class="bad-t" style="font-weight:600">평균이 올랐으니 전체가 좋아졌다</td><td>평균과 함께 <b>C·D 비율</b>(80점 미만)을 봅니다</td></tr>
+      <tr><td class="bad-t" style="font-weight:600">전년 대비는 모든 협력사 기준이다</td><td><b>전년 평가가 있는 협력사만</b> 비교합니다 (신규는 제외)</td></tr>
+      <tr><td class="bad-t" style="font-weight:600">추이선은 그해 평가된 모든 협력사다</td><td><b>기준연도 평가 협력사 집단</b>을 과거까지 따라간 값입니다</td></tr>
+      <tr><td class="bad-t" style="font-weight:600">부진사·우수사 명단은 확정이다</td><td>"<b>임시 기준</b>" 배지가 있으면 기준이 아직 확정 전입니다</td></tr>
+      <tr><td class="bad-t" style="font-weight:600">영역 점수가 낮다 = 그 영역 협력사가 나쁘다</td><td>영역 점수는 배점 대비 환산(0~100) 평균. <b>기준선(평균·70점)</b>과 함께 봅니다</td></tr>
+    </table>
+    <div class="grid-3">
+      <div class="card flat"><b>등급 기준</b><p class="small dim">A 90점 이상 · B 80점 이상 · C 60점 이상 · D 60점 미만</p></div>
+      <div class="card flat"><b>색</b><p class="small dim">파랑 = 좋음 · 빨강 = 나쁨 · 회색 = 보통 (▲▼ 병행)</p></div>
+      <div class="card flat"><b>출처 <code>i</code></b><p class="small dim">카드 제목 옆 <code>i</code>에 마우스 → 쓰는 엑셀 열 이름</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="8. 사례 해부" data-title="8.4 구조 해부">
+  <div class="hd"><span class="sec-no">8.4</span><h2 class="title">구조 해부 — 화면의 각 부분은 어떤 코드인가</h2></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col w3"><figure class="shot"><img src="{{img:shot_area}}" alt="항목별 결과 화면">
+        <span class="pin s" style="left:15.6%;top:13.4%">1</span><span class="pin s" style="left:15.6%;top:22.6%">2</span>
+        <span class="pin s" style="left:16.2%;top:45.6%">3</span><span class="pin s" style="left:39.4%;top:73%">4</span>
+        <span class="pin s" style="left:62.4%;top:56.6%">5</span><span class="pin s" style="left:73%;top:62%">6</span><span class="pin s" style="left:89.5%;top:89.2%">7</span></figure></div>
+      <div class="col w2"><div class="legend" style="font-size:25px">
+        <div><span class="pin">1</span><span><b>필터 줄</b> = <code>state.filters</code></span></div>
+        <div><span class="pin">2</span><span><b>영역 타일</b> = 선택 상태 + <code>atile()</code></span></div>
+        <div><span class="pin">3</span><span><b>카드</b> = <code>card()</code> 제목·i·표 보기</span></div>
+        <div><span class="pin">4</span><span><b>선 차트</b> = SVG 문자열 <code>lineYears()</code></span></div>
+        <div><span class="pin">5</span><span><b>막대 목록</b> = <code>hbars()</code></span></div>
+        <div><span class="pin">6</span><span><b>표</b> = <code>simpleTable()</code></span></div>
+        <div><span class="pin">7</span><span><b>CSV</b> = <code>downloadCSV()</code> (BOM)</span></div>
+      </div>
+      <div class="callout warn" style="font-size:24px"><div class="t">이 모두가 같은 L에서</div>필터를 바꾸면 <b>전부 다시</b> 그려집니다.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="8. 사례 해부" data-title="8.5 가져갈 뼈대, 바꿀 살">
+  <div class="hd"><span class="sec-no">8.5</span><h2 class="title">가져갈 뼈대, 바꿀 살</h2><p class="lead">내 대시보드에서는 무엇을 그대로 쓰고, 무엇을 바꾸나</p></div>
+  <div class="bd">
+    <div class="grid-2">
+      <div class="card ok"><h3 class="ok-t">뼈대 — 그대로 가져갑니다</h3><ul class="b s"><li>빌드 4단계 + <b>점검 리포트</b></li><li>상태 1개 + <code>render()</code> 1회</li><li>카드 · 차트 · 표 부품</li><li>설정 파일로 기준 분리</li><li>정적 배포 + 보안 규칙</li><li>AI 협업 6단계 + 지시서 구조</li></ul></div>
+      <div class="card orange"><h3 class="warn-t">살 — 내 업무에 맞게 바꿉니다</h3><ul class="b s"><li><b>질문과 KPI</b></li><li>열 이름 · 스키마 · 키</li><li>등급 구간 · 기준 · 라벨</li><li>화면 구성 (3종 패턴 안에서)</li><li>색 · 로고 · 문구</li><li>배포 위치 · 갱신 주기</li></ul></div>
+    </div>
+    <div class="callout"><div class="t">시작은 가장 작게</div>화면 <b>1개</b>, KPI <b>4개</b>, 엑셀 <b>1개</b>, 연도 <b>1개</b>로 끝까지 돌려 본 뒤 늘립니다. 실습 키트가 정확히 그 크기입니다.</div>
+  </div>
+</section>

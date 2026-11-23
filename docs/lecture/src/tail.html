@@ -1,0 +1,151 @@
+  <div id="progress"></div><div id="chapter-tag"></div><div id="counter"></div>
+</div>
+<div id="navbtns"><button id="nav-prev" type="button" aria-label="이전 슬라이드">‹</button><button id="nav-next" type="button" aria-label="다음 슬라이드">›</button></div>
+<div id="chapnav" aria-label="장 이동"></div>
+<div id="overview" role="dialog" aria-label="전체 슬라이드"><h2>전체 슬라이드 <span style="font-size:20px;color:#8ea0c4;font-weight:400">· 누르면 이동 · O 또는 Esc로 닫기</span></h2><div id="ov-body"></div></div>
+<div id="hint">← → 이동 · O 개요 · T 다크 · F 전체화면 · 1~9 장 이동</div>
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+  var stage = $('#stage'), slides = $$('.slide', stage), N = slides.length, cur = -1;
+
+  /* ── 제목 · 장 정보 (슬라이드의 data-title / data-chapter 에서 자동으로 만든다 → 개수가 어긋날 수 없다) ── */
+  var TITLES = slides.map(function (s, i) { if (!s.getAttribute('data-title')) console.warn('data-title 없음: 슬라이드 ' + (i + 1)); return s.getAttribute('data-title') || ('슬라이드 ' + (i + 1)); });
+  var chapNo = slides.map(function (s) { var m = (s.getAttribute('data-chapter') || '').match(/^(\d+)\./); return m ? +m[1] : 0; });
+  var chapters = {};
+  slides.forEach(function (s, i) {
+    var no = chapNo[i]; if (!no) return;
+    var c = chapters[no] || (chapters[no] = { no: no, name: (s.getAttribute('data-chapter') || '').replace(/^\d+\.\s*/, ''), first: i, last: i, divider: i });
+    c.last = i; if (s.classList.contains('chapter')) c.divider = i;
+  });
+  var chapList = Object.keys(chapters).map(function (k) { return chapters[k]; }).sort(function (a, b) { return a.no - b.no; });
+
+  /* ── 목차 쪽수 · 장 표지의 하위 목록 ── */
+  $$('.toc-card').forEach(function (card) {
+    var c = chapters[card.getAttribute('data-ch')]; if (!c) return;
+    $('.pg', card).textContent = 'p.' + (c.first + 1) + '–' + (c.last + 1); card.setAttribute('href', '#slide=' + (c.divider + 1));
+  });
+  $$('.slide.chapter').forEach(function (s, k) {
+    var i = slides.indexOf(s), no = chapNo[i], ul = $('.ch-list', s); if (!ul) return;
+    ul.innerHTML = slides.map(function (_, j) { return j !== i && chapNo[j] === no ? '<li>' + esc(TITLES[j]) + '</li>' : ''; }).join('');
+  });
+
+  /* ── 코드 블록: 색칠 + 복사 버튼 ── */
+  var KW = { py: /^(?:def|return|import|from|as|if|elif|else|for|in|while|with|try|except|raise|class|not|and|or|None|True|False|lambda|pass|continue|break|is|global)$/,
+             js: /^(?:const|let|var|function|return|if|else|for|of|in|new|true|false|null|undefined|async|await|class|this|typeof|try|catch|throw|break|continue|switch|case|default)$/ };
+  var RE = { py: /(#[^\n]*)|('''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*")|(\b\d+(?:\.\d+)?\b)|(\b[A-Za-z_]\w*\b)/g,
+             js: /(\/\/[^\n]*)|(`(?:\\.|[^`\\])*`|'(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*")|(\b\d+(?:\.\d+)?\b)|(\b[A-Za-z_$][\w$]*\b)/g,
+             sh: /(#[^\n]*)|('[^'\n]*'|"(?:\\.|[^"\\\n])*")|(\b\d+(?:\.\d+)?\b)|(--?[A-Za-z][\w-]*)/g };
+  function hl(src, lang) {
+    var re = RE[lang]; if (!re) return esc(src);
+    re.lastIndex = 0; var out = '', last = 0, m;
+    while ((m = re.exec(src))) {
+      out += esc(src.slice(last, m.index)); last = re.lastIndex;
+      var cls = '', t = m[0];
+      if (m[1]) cls = 'c'; else if (m[2]) cls = 's1'; else if (m[3]) cls = 'n';
+      else if (m[4]) { if (lang === 'sh') cls = 'f'; else if (KW[lang].test(t)) cls = 'k'; else if (src.charAt(re.lastIndex) === '(') cls = 'f'; }
+      out += cls ? '<span class="' + cls + '">' + esc(t) + '</span>' : esc(t);
+    }
+    return out + esc(src.slice(last));
+  }
+  function copyText(text, btn) {
+    var done = function () { var old = btn.textContent; btn.textContent = '복사됨'; setTimeout(function () { btn.textContent = old; }, 1200); };
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, function () { fallback(); }); } else { fallback(); }
+    function fallback() { var t = document.createElement('textarea'); t.value = text; t.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e) { /* 복사 불가 환경은 무시 */ } t.remove(); done(); }
+  }
+  $$('pre.code').forEach(function (pre) {
+    var lang = pre.getAttribute('data-lang'), src = pre.textContent.replace(/^\n/, '').replace(/\s+$/, '');
+    if (lang && lang !== 'text') pre.innerHTML = hl(src, lang);
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'copy'; b.textContent = '복사';
+    b.addEventListener('click', function (e) { e.stopPropagation(); copyText(src, b); });
+    pre.appendChild(b);
+  });
+
+  /* ── 화면 맞춤 ── */
+  function fit() { stage.style.zoom = Math.min(window.innerWidth / 1920, window.innerHeight / 1080); }
+  window.addEventListener('resize', fit); document.addEventListener('fullscreenchange', fit); fit();
+
+  /* ── 이동 · 단계별 공개 ── */
+  var groups = [], shown = 0;
+  function setFrags(s, all) {
+    var map = {}, list = []; groups = [];
+    $$('.fragment', s).forEach(function (f, i) { var k = f.getAttribute('data-group') || ('_' + i); if (map[k] === undefined) { map[k] = list.length; list.push([]); } list[map[k]].push(f); });
+    groups = list; shown = all ? groups.length : 0;
+    groups.forEach(function (g, i) { g.forEach(function (f) { f.classList.toggle('shown', i < shown); }); });
+  }
+  function chrome() {
+    var s = slides[cur];
+    stage.setAttribute('data-type', s.classList.contains('cover') ? 'cover' : s.classList.contains('chapter') ? 'chapter' : 'content');
+    $('#chapter-tag').textContent = s.getAttribute('data-chapter') || '';
+    $('#counter').textContent = (cur + 1) + ' / ' + N;
+    $('#progress').style.width = (N > 1 ? cur / (N - 1) * 100 : 100) + '%';
+    $$('#chapnav button').forEach(function (b) { b.classList.toggle('cur', +b.getAttribute('data-no') === chapNo[cur]); });
+    var h = '#slide=' + (cur + 1);
+    try { history.replaceState(null, '', h); } catch (e) { location.hash = h; }
+    document.title = TITLES[cur] + ' · 대시보드 만들기 교육';
+  }
+  function go(n, how) {
+    n = Math.max(0, Math.min(N - 1, n)); if (n === cur) return;
+    if (cur >= 0) slides[cur].classList.remove('active');
+    cur = n; slides[cur].classList.add('active');
+    setFrags(slides[cur], how !== 'next'); chrome();
+  }
+  function next() { if (shown < groups.length) { groups[shown].forEach(function (f) { f.classList.add('shown'); }); shown++; return; } go(cur + 1, 'next'); }
+  function prev() { if (shown > 0 && shown < groups.length) { shown--; groups[shown].forEach(function (f) { f.classList.remove('shown'); }); return; } go(cur - 1, 'prev'); }
+  function chapterJump(no) { var c = chapters[no]; if (c) go(c.divider, 'jump'); }
+  var fromHash = function () { var m = location.hash.match(/slide=(\d+)/); return m ? +m[1] - 1 : 0; };
+
+  /* ── 장 이동 막대 · 개요 ── */
+  $('#chapnav').innerHTML = chapList.map(function (c) { return '<button type="button" data-no="' + c.no + '" title="' + esc(c.no + '. ' + c.name) + '">' + c.no + '</button>'; }).join('');
+  $('#chapnav').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) chapterJump(+b.getAttribute('data-no')); });
+  function buildOverview() {
+    var parts = [], head = null, buf = [];
+    var flush = function () { if (head !== null) parts.push('<div class="grp"><h3>' + esc(head) + '</h3><div id="ov-grid">' + buf.join('') + '</div></div>'); buf = []; };
+    slides.forEach(function (s, i) {
+      var label = chapNo[i] ? chapNo[i] + '. ' + chapters[chapNo[i]].name : (i < chapters[chapList[0].no].first ? '시작' : '마무리');
+      if (label !== head) { flush(); head = label; }
+      buf.push('<button type="button" data-i="' + i + '"' + (i === cur ? ' class="cur"' : '') + '><b>' + (i + 1) + '</b><span>' + esc(TITLES[i]) + '</span></button>');
+    });
+    flush(); $('#ov-body').innerHTML = parts.join('');
+  }
+  var ov = $('#overview'), ovOpen = function () { return ov.classList.contains('open'); };
+  function toggleOverview(on) { if (on === undefined) on = !ovOpen(); if (on) buildOverview(); ov.classList.toggle('open', on); }
+  ov.addEventListener('click', function (e) { var b = e.target.closest('button[data-i]'); if (b) { go(+b.getAttribute('data-i'), 'jump'); toggleOverview(false); } else if (e.target === ov) toggleOverview(false); });
+
+  /* ── 테마 · 전체화면 ── */
+  function setTheme(dark) { document.body.classList.toggle('theme-dark', dark); try { localStorage.setItem('deck-theme', dark ? 'dark' : 'light'); } catch (e) { /* 저장 불가 환경은 무시 */ } }
+  try { if (localStorage.getItem('deck-theme') === 'dark') setTheme(true); } catch (e) { /* 무시 */ }
+  function toggleFull() { if (document.fullscreenElement) document.exitFullscreen(); else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); }
+
+  /* ── 입력 ── */
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var k = e.key;
+    if (ovOpen()) { if (k === 'Escape' || k === 'o' || k === 'O') { toggleOverview(false); e.preventDefault(); } return; }
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter') { next(); e.preventDefault(); }
+    else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace') { prev(); e.preventDefault(); }
+    else if (k === 'Home') go(0, 'jump'); else if (k === 'End') go(N - 1, 'jump');
+    else if (/^[1-9]$/.test(k)) chapterJump(+k);
+    else if (k === 'o' || k === 'O') toggleOverview(true);
+    else if (k === 't' || k === 'T') setTheme(!document.body.classList.contains('theme-dark'));
+    else if (k === 'f' || k === 'F') toggleFull();
+  });
+  stage.addEventListener('click', function (e) {
+    if (e.target.closest('a, button, pre, svg, .noclick')) return;
+    if (window.getSelection && String(window.getSelection()).length) return;      // 글자를 드래그해서 고른 경우는 이동하지 않음
+    var r = stage.getBoundingClientRect(); if (e.clientX > r.left + r.width / 2) next(); else prev();
+  });
+  $('#nav-next').addEventListener('click', next); $('#nav-prev').addEventListener('click', prev);
+  window.addEventListener('hashchange', function () { var n = fromHash(); if (n !== cur) go(n, 'jump'); });
+  var uiTimer; function showUi() { document.body.classList.add('ui'); clearTimeout(uiTimer); uiTimer = setTimeout(function () { document.body.classList.remove('ui'); }, 2600); }
+  document.addEventListener('mousemove', showUi); showUi();
+
+  window.__deck = { go: function (n) { go(n, 'jump'); }, N: N, cur: function () { return cur; }, titles: TITLES, chapters: chapList };
+  go(fromHash(), 'hash');
+})();
+</script>
+</body>
+</html>

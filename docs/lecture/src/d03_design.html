@@ -1,0 +1,68 @@
+<!-- ═══════════ 3장 설계 ═══════════ -->
+<section class="slide chapter" data-chapter="3. 설계" data-title="3. 설계 (1단계) — 질문에서 화면까지">
+  <div class="ch-no">3</div><div class="ch-title">설계</div><div class="ch-sub">5단계 로드맵의 1단계 —<br>질문에서 출발해 화면까지 정합니다</div><span class="ch-time">약 15분</span>
+  <ul class="ch-list"></ul>
+</section>
+
+<section class="slide" data-chapter="3. 설계" data-title="3.1 질문 → KPI → 화면">
+  <div class="hd"><span class="sec-no">3.1</span><h2 class="title">질문 없는 차트는 넣지 않습니다</h2><p class="lead">질문 → KPI(숫자) → 화면 순서로 정합니다</p></div>
+  <div class="bd">
+    <div class="row" style="gap:0;font-size:22px;font-weight:800;color:var(--dim);letter-spacing:.04em"><div class="col" style="flex:1">질문</div><div style="width:66px"></div><div class="col" style="flex:1">KPI — 숫자 + 비교 기준</div><div style="width:66px"></div><div class="col" style="flex:1">화면</div></div>
+    <div class="flow"><div class="node hl2" style="text-align:left"><b style="font-size:29px">올해 결과는 지난해보다 좋아졌나?</b></div><div class="arrow">→</div><div class="node" style="text-align:left"><b style="font-size:29px">평균 점수 + 전년 대비</b><span>등급별 비율</span></div><div class="arrow">→</div><div class="node hl" style="text-align:left"><b style="font-size:29px">결과 요약</b><span>맨 위 핵심 숫자 + 결론 3줄</span></div></div>
+    <div class="flow"><div class="node hl2" style="text-align:left"><b style="font-size:29px">어느 영역·항목이 약한가?</b></div><div class="arrow">→</div><div class="node" style="text-align:left"><b style="font-size:29px">영역별 평균 · 70점 미만 비율</b><span>전년 대비 증감</span></div><div class="arrow">→</div><div class="node hl" style="text-align:left"><b style="font-size:29px">항목별 결과</b><span>영역 → 평가항목 → 하위 협력사</span></div></div>
+    <div class="flow"><div class="node hl2" style="text-align:left"><b style="font-size:29px">이 협력사는 무엇을 개선해야 하나?</b></div><div class="arrow">→</div><div class="node" style="text-align:left"><b style="font-size:29px">점수·등급 이동 · 항목 순위</b><span>5개년 추이</span></div><div class="arrow">→</div><div class="node hl" style="text-align:left"><b style="font-size:29px">협력사별 결과</b><span>목록 → 개별 상세</span></div></div>
+    <div class="callout"><div class="t">KPI는 "숫자 + 비교 기준"으로 정의합니다</div>전년·목표·평균 같은 <b>비교 기준이 없는 숫자</b>는 좋은지 나쁜지 알 수 없습니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="3. 설계" data-title="3.2 화면 3종 패턴">
+  <div class="hd"><span class="sec-no">3.2</span><h2 class="title">화면은 세 가지 패턴이면 충분합니다</h2></div>
+  <div class="bd">
+    <div class="grid-3">
+      <div class="card accent"><span class="tag human">경영진</span><h3 style="margin-top:8px">① 요약</h3><p class="dim small">1분 안에 상황 파악</p><ul class="b s mt-s"><li>결론 3줄</li><li>핵심 숫자 4개 (+전년)</li><li>5개년 추이</li><li>부진·우수 명단 링크</li></ul></div>
+      <div class="card accent"><span class="tag ai">담당자</span><h3 style="margin-top:8px">② 분석</h3><p class="dim small">어디가 문제인지 찾기</p><ul class="b s mt-s"><li>영역 → 항목 → 하위 목록</li><li>필터(연도·조직·업종…)</li><li>기준선(목표·평균)</li><li>표 보기 · CSV</li></ul></div>
+      <div class="card accent"><span class="tag">리뷰</span><h3 style="margin-top:8px">③ 개별</h3><p class="dim small">한 대상을 깊게 보기</p><ul class="b s mt-s"><li>목록(검색·칩·정렬)</li><li>5개년 추이 + 등급 이동</li><li>항목별 점수와 순위</li><li>세부 항목 근거</li></ul></div>
+    </div>
+    <div class="callout"><div class="t">핵심만 ↔ 상세 보기</div>모든 화면은 <b>기본이 "핵심만"</b>입니다. 상단의 <b>상세 보기</b>를 켜면 세부 카드·표가 펼쳐집니다. 화면을 늘리기 전에 기존 3종으로 풀 수 없는지 먼저 봅니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="3. 설계" data-title="3.3 화면 정의서 한 장">
+  <div class="hd"><span class="sec-no">3.3</span><h2 class="title">화면 정의서 한 장 — AI에게 줄 첫 자료</h2><p class="lead">화면마다 이 표 하나를 채웁니다 (예: 결과 요약)</p></div>
+  <div class="bd">
+    <table class="t s">
+      <tr><th style="width:190px">항목</th><th>내용 (예)</th></tr>
+      <tr><td>질문</td><td>올해 평가 결과는 지난해보다 좋아졌는가?</td></tr>
+      <tr><td>KPI 정의</td><td>평균 종합 점수(전년 대비 · 목표까지) · A등급 비율 · C·D 비율 · 부진사/우수사 후보 수</td></tr>
+      <tr><td>차트·표</td><td>5개년 추이(선) · 등급 구성(분할 막대) · 영역별 전년·올해(표) · 변화가 큰 업종·협력사</td></tr>
+      <tr><td>필터</td><td>평가 연도 · 조직 · 권역 · 업종 · 등급 (여러 개는 AND)</td></tr>
+      <tr><td>클릭하면</td><td>명단 링크 → 협력사별 결과로 이동 · 업종 타일 → 필터 켜기/끄기</td></tr>
+      <tr><td>데이터 출처</td><td>평가결과표(점수·등급·전년) · 영역점수표</td></tr>
+      <tr><td>완료 기준</td><td>필터를 바꿔도 모든 카드가 <b>같은 협력사 목록</b>에서 다시 계산된다</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="slide" data-chapter="3. 설계" data-title="3.4 AI에게 목업 요청하기">
+  <div class="hd"><span class="sec-no">3.4</span><h2 class="title">AI에게 이렇게 — 가상 데이터로 목업부터</h2></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col w3"><p class="cap">요청문 예</p>
+<pre class="code s" data-lang="text">아래 화면 정의서대로 HTML 목업을 만들어줘.
+
+- 실제 값은 모른다. 열 이름만 알려 주니 값은 가상으로 만들어
+  (협력사 코드, 협력사명, 업종, 종합 점수, 등급,
+   전년 종합 점수, 영역별 점수 5개)
+- 단일 HTML, 외부 CDN·웹폰트 없이, 라이트/다크 모드
+- 핵심 숫자를 맨 위에, 색은 의미 있을 때만
+  (파랑=좋음, 빨강=나쁨, 회색=보통)
+- 차트마다 "그래서?" 한 줄 해석
+
+[화면 정의서 붙여넣기]</pre></div>
+      <div class="col w2">
+        <div class="card ok"><h3>받으면 확인할 것</h3><ul class="check" style="font-size:26px"><li>질문에 답하는가?</li><li>핵심 숫자가 한눈에 보이는가?</li><li>색에 의미가 있는가?</li><li>기준선(전년·목표)이 있는가?</li><li>클릭하면 어디로 가는가?</li></ul></div>
+      </div>
+    </div>
+    <div class="callout warn"><div class="t">목업에서 많이 고치세요</div>이 사례도 목업을 <b>여러 번</b> 고쳤습니다. 구현이 끝난 뒤 고치는 것보다 훨씬 쌉니다.</div>
+  </div>
+</section>

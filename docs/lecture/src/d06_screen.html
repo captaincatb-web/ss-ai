@@ -1,0 +1,109 @@
+<!-- ═══════════ 6장 화면 ═══════════ -->
+<section class="slide chapter" data-chapter="6. 화면" data-title="6. 화면 (4단계) — 브라우저는 그림만">
+  <div class="ch-no">6</div><div class="ch-title">화면</div><div class="ch-sub">4단계 — 브라우저는 그림만 그립니다.<br>상태 하나, <code style="font-size:.9em;background:rgba(255,255,255,.15);color:#fff">render()</code> 하나</div><span class="ch-time">약 20분</span>
+  <ul class="ch-list"></ul>
+</section>
+
+<section class="slide" data-chapter="6. 화면" data-title="6.1 정적 프론트 구조">
+  <div class="hd"><span class="sec-no">6.1</span><h2 class="title">정적 프론트 구조 — 바닐라 JS + SVG</h2><p class="lead">프레임워크도 차트 라이브러리도 없이 파일 몇 개로 끝납니다</p></div>
+  <div class="bd">
+    <div class="row top">
+      <div class="col w2"><p class="cap">app.js의 층 (위가 나중에 실행)</p>
+        <div class="flow" style="flex-direction:column;gap:0">
+          <div class="node hl2" style="padding:12px 18px"><b style="font-size:28px">⑤ 시작 <code>boot()</code></b></div><div style="text-align:center;font-size:30px;color:var(--accent);line-height:1">↑</div>
+          <div class="node hl" style="padding:12px 18px"><b style="font-size:28px">④ 화면 — 요약 · 항목별 · 개별</b></div><div style="text-align:center;font-size:30px;color:var(--accent);line-height:1">↑</div>
+          <div class="node" style="padding:12px 18px"><b style="font-size:28px">③ 부품 — 카드 · 차트 · 표</b></div><div style="text-align:center;font-size:30px;color:var(--accent);line-height:1">↑</div>
+          <div class="node" style="padding:12px 18px"><b style="font-size:28px">② 계산 보조 — 필터 · 평균 · 순위</b></div><div style="text-align:center;font-size:30px;color:var(--accent);line-height:1">↑</div>
+          <div class="node hl2" style="padding:12px 18px"><b style="font-size:28px">① 설정 · 데이터 읽기</b><span style="font-size:22px"><code>settings.js</code> · <code>data.js</code></span></div>
+        </div></div>
+      <div class="col w3">
+        <div class="card accent"><h3>파일 구성</h3><p class="small"><code>index.html</code> 뼈대 · <code>styles.css</code> · <code>app.js</code> · <code>data.js</code> · <code>settings.js</code></p></div>
+        <div class="card accent"><h3>원칙</h3><ul class="b s"><li>외부 라이브러리·CDN·웹폰트 없음</li><li>차트는 <b>SVG 문자열</b>로 직접 그림</li><li>아래 층은 위 층을 모른다</li><li>데이터가 없으면 <b>오류 화면</b> (가짜로 대신하지 않음)</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="6. 화면" data-title="6.2 상태 하나 + render 하나">
+  <div class="hd"><span class="sec-no">6.2</span><h2 class="title">상태 객체 1개 + render() 1회</h2></div>
+  <div class="bd top">
+    <div class="flow"><div class="node hl2"><b>사용자 동작</b><span>클릭 · 입력 · 선택</span></div><div class="arrow">→</div><div class="node"><b>state 변경</b><span>값만 바꾼다</span></div><div class="arrow">→</div><div class="node hl"><b>render()</b><span>같은 목록 L로 전부 다시</span></div><div class="arrow">→</div><div class="node"><b>화면 갱신</b><span>카드·차트·표</span></div></div>
+    <div class="row top">
+      <div class="col w3"><p class="cap">실습 키트 index.html에서 (줄여 옮김)</p>
+<pre class="code s" data-lang="js">const state = { group: '', q: '', sort: 'desc', limit: 20 };
+const filtered = () => D.suppliers.filter(x =>
+  (!state.group || x.group === state.group) &&
+  (!state.q || (x.name + x.code).includes(state.q)));
+
+function render() {
+  const L = filtered();         // 모든 카드는 같은 목록 L 에서
+  $('#app').innerHTML = kpis(L) + gradeCard(L) + areaCard(L)
+                      + trendCard(L) + tableCard(L);
+  // 이벤트: state 를 바꾸고 render() 를 다시 부른다
+}</pre></div>
+      <div class="col w2"><div class="card ok"><h3>왜 이렇게?</h3><ul class="b s"><li>숫자가 <b>서로 어긋나지 않는다</b> (같은 L)</li><li>고칠 곳이 한 곳</li><li>해시(<code>#report</code>)로 화면을 기억 → 새로고침·링크 공유</li></ul></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="6. 화면" data-title="6.3 KPI·차트·표를 고르는 기준">
+  <div class="hd"><span class="sec-no">6.3</span><h2 class="title">KPI·차트·표를 고르는 기준</h2></div>
+  <div class="bd top">
+    <div class="row top">
+      <div class="col w2">
+        <div class="card" style="background:var(--accent-bg);border-color:var(--accent)"><div class="dim small">평균 종합 점수</div><div style="font-size:76px;font-weight:900;line-height:1.1;color:var(--title)">82.9<span style="font-size:30px;color:var(--dim);font-weight:700"> 점</span></div><div style="font-size:26px;font-weight:800;color:var(--accent-ink)">▲ 1.3점 <span class="dim" style="font-weight:400">전년 대비</span></div><div class="dim small mt-s">목표 85점까지 2.1점</div></div>
+        <table class="t s"><tr><th>보여 줄 것</th><th>이것으로</th></tr><tr><td>추이</td><td>선</td></tr><tr><td>비교</td><td>막대</td></tr><tr><td>구성</td><td>분할 막대 (파이·3D 금지)</td></tr><tr><td>순위</td><td>정렬된 표 + 막대</td></tr></table>
+      </div>
+      <div class="col w3"><div class="steps">
+        <div class="step"><div class="no">1</div><div><b>핵심 지표 하나를 크게 + 증감</b><p>모든 숫자가 똑같이 중요해 보이면 아무것도 안 보입니다</p></div></div>
+        <div class="step"><div class="no">2</div><div><b>색은 의미 있을 때만</b><p>파랑 = 좋음 · 빨강 = 나쁨 · 회색 = 보통</p></div></div>
+        <div class="step"><div class="no">3</div><div><b>기준선을 함께</b><p>목표·전년·평균 — 비교 기준 없는 숫자는 해석할 수 없음</p></div></div>
+        <div class="step"><div class="no">4</div><div><b>차트마다 "그래서?" 한 줄</b><p>무엇이 아니라 <b>그래서 어떻게 해야 하는지</b></p></div></div>
+        <div class="step"><div class="no">5</div><div><b>숫자는 단순하게</b><p>점수 소수 1자리 · 비율은 정수 · 색만으로 전달하지 않기(▲▼ 병행)</p></div></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="6. 화면" data-title="6.4 드릴다운">
+  <div class="hd"><span class="sec-no">6.4</span><h2 class="title">드릴다운은 이전 선택을 물려받습니다</h2><p class="lead">"왜 이 숫자인지"가 끊기지 않게 — 선택은 다음 화면까지 이어집니다</p></div>
+  <div class="bd">
+    <div class="flow">
+      <div class="node hl"><b>결과 요약</b><span>핵심 숫자 · 명단 링크</span></div><div class="arrow">→</div>
+      <div class="node hl"><b>항목별 결과</b><span>영역 → 평가항목</span></div><div class="arrow">→</div>
+      <div class="node hl"><b>협력사별 결과</b><span>목록 → 개별 상세</span></div>
+    </div>
+    <div class="grid-3">
+      <div class="card accent"><h3>필터는 전 화면</h3><p class="small">한 줄 필터를 바꾸면 <b>모든 화면</b>이 같은 목록으로 다시 계산됩니다.</p></div>
+      <div class="card accent"><h3>링크는 목적지까지</h3><p class="small">"부진사 명단 →"을 누르면 협력사별 결과로 가서 <b>그 칩이 이미 선택</b>되어 있습니다.</p></div>
+      <div class="card accent"><h3>행 클릭 = 상세</h3><p class="small">목록의 행을 누르면 그 협력사의 상세로. 해시에 기억돼 <b>링크로 공유</b>됩니다.</p></div>
+    </div>
+    <div class="callout"><div class="t">설계 규칙</div>모든 화면에는 <b>"다음에 어디로 가는가"</b>가 있어야 합니다. 막다른 숫자는 질문을 끝내지 못합니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="6. 화면" data-title="6.5 실전 기능">
+  <div class="hd"><span class="sec-no">6.5</span><h2 class="title">현장에서 꼭 필요한 기능 6가지</h2></div>
+  <div class="bd">
+    <div class="grid-3">
+      <div class="card accent"><h3>상세 보기</h3><p class="small">기본은 <b>핵심만</b>. 버튼을 켜면 세부 카드·표가 펼쳐집니다.</p></div>
+      <div class="card accent"><h3>표 보기</h3><p class="small">차트 ↔ <b>같은 숫자의 표</b>. 정확한 값 확인과 접근성.</p></div>
+      <div class="card accent"><h3>출처 <code>i</code> 버튼</h3><p class="small">카드가 쓰는 <b>엑셀 열 이름</b>이 보입니다. 숫자를 의심할 때 추적.</p></div>
+      <div class="card accent"><h3>CSV 내려받기</h3><p class="small"><b>UTF-8 BOM</b>을 붙여야 엑셀에서 한글이 깨지지 않습니다.</p></div>
+      <div class="card accent"><h3>인쇄 · PDF</h3><p class="small"><code>@media print</code>로 메뉴·필터를 숨기고 A4 보고서로.</p></div>
+      <div class="card orange"><h3>AI 대화 패널</h3><p class="small">화살표 손잡이로 여는 오른쪽 패널. <b>디자인과 열고 닫기만</b> — API는 연결 자리만 둡니다.</p></div>
+    </div>
+    <div class="callout warn"><div class="t">AI 패널에 LLM 호출 코드를 넣지 않는 이유</div>주소·키가 코드에 들어가면 저장소로 새어 나갑니다. <code>window.SUPPLIER_CHAT.ask</code> 한 곳만 비워 두고, 연결은 별도로 합니다.</div>
+  </div>
+</section>
+
+<section class="slide" data-chapter="6. 화면" data-title="6.6 접근성과 성능">
+  <div class="hd"><span class="sec-no">6.6</span><h2 class="title">접근성과 성능 — 기본 점검 항목</h2></div>
+  <div class="bd">
+    <div class="grid-2">
+      <div class="card ok"><h3>접근성</h3><ul class="check" style="font-size:26px"><li>키보드(Tab · Enter)로 모든 기능 사용</li><li>툴팁이 마우스와 <b>키보드 포커스</b> 모두에서</li><li>색만으로 의미를 전달하지 않음 (▲▼ · 글자 병행)</li><li>차트에는 <b>표 보기</b></li><li>다크 모드에서도 읽힘</li></ul></div>
+      <div class="card accent"><h3>성능</h3><ul class="check" style="font-size:26px"><li>필터 변경 후 <b>1초 이내</b> (협력사 5,000개 이하)</li><li>표는 한 번에 <b>10행</b>씩</li><li>순위·평균은 렌더 한 번에 한 번만 계산</li><li>검색 입력은 <b>0.18초</b> 지연 후 반영</li><li>창 크기가 바뀌면 차트를 다시 그림</li></ul></div>
+    </div>
+    <div class="callout"><div class="t">데이터가 더 커지면?</div>5,000행을 넘으면 <b>빌드에서 요약본</b>을 따로 만들어 화면은 요약만 읽게 합니다. 브라우저에서 줄이려 하지 않습니다.</div>
+  </div>
+</section>

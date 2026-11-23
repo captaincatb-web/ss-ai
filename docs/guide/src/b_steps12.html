@@ -1,5 +1,5 @@
-<!-- ═════════ 5 STEP 1 ═════════ -->
-<section class="sheet" id="p5" data-sec="STEP 1 · 질문부터 정하기">
+<!-- ═════════ 6 STEP 1 ═════════ -->
+<section class="sheet" id="p6" data-sec="STEP 1 · 질문부터 정하기">
   <div class="stepbadge"><b>STEP 1</b><span>5분</span></div>
   <h2 class="h">질문부터 정하기</h2>
   <p class="lede">이 단계에서는 "무엇을 보여 줄까"가 아니라 "이 화면으로 무엇을 결정할까"를 한 문장으로 적습니다.</p>
@@ -7,7 +7,7 @@
     <div class="bad"><h4><svg class="ic"><use href="#i-x"/></svg>이렇게 말고</h4><p>"매출 대시보드 만들어줘"</p><span class="why">AI가 흔한 차트를 채워 넣습니다. 내 질문에 답하는 차트인지 알 수 없습니다.</span></div>
     <div class="good"><h4><svg class="ic"><use href="#i-ok"/></svg>이렇게</h4><p>"팀장이 월요일 회의에서 '이번 달 매출이 지난달보다 좋아졌는지, 어느 제품이 문제인지'를 1분 안에 보게 하고 싶습니다."</p><span class="why">누가, 얼마나 오래, 무엇을 결정하는지가 들어 있습니다.</span></div>
   </div>
-  <p>Quick Start의 프롬프트를 이미 썼다면 그 결과가 STEP 1입니다. 질문이 이미 있다면 아래 짧은 버전을 씁니다.</p>
+  <p>Quick Start의 프롬프트를 이미 썼다면 그 결과가 STEP 1입니다(대화는 10~20분이면 충분합니다). 질문이 이미 있다면 아래 짧은 버전을 씁니다.</p>
   <div class="tb prompt">
     <div class="tb-bar"><span class="tb-dots"><i></i><i></i><i></i></span><span class="tb-title"><svg class="ic"><use href="#i-chat"/></svg><span class="where">AI 대화창</span>에 붙여넣기</span><button class="copy" type="button">복사</button></div>
 <pre>아래 질문에 답하는 대시보드의 KPI와 화면을 제안해 주세요.
@@ -25,13 +25,13 @@
     <tr><td>분석</td><td>담당자 · 10분</td><td>영역·항목별 비교, 필터, 기준선</td></tr>
     <tr><td>개별</td><td>리뷰하는 사람 · 대상 1개</td><td>한 대상의 추이, 항목별 순위, 세부 내용</td></tr>
   </table>
-  <div class="callout warn"><b class="t">질문은 2~3개까지만</b>질문이 3개를 넘으면 화면이 복잡해집니다. 2개로 시작하고, 질문에 답하지 않는 차트는 넣지 않습니다.</div>
+  <div class="callout warn"><b class="t">첫 버전(MVP)은 질문 1~2개로</b>질문이 3개를 넘으면 화면이 복잡해지고 시작도 못 합니다. 가장 급한 1~2개로 먼저 만들고, 되면 넓히세요. 질문에 답하지 않는 차트는 넣지 않습니다.</div>
 </section>
 
-<!-- ═════════ 6 STEP 2 ═════════ -->
-<section class="sheet" id="p6" data-sec="STEP 2 · 가상 데이터로 목업">
-  <div class="stepbadge"><b>STEP 2</b><span>10분</span></div>
-  <h2 class="h">열 이름만 주고 가상 데이터로 목업 만들기</h2>
+<!-- ═════════ 7 STEP 2 ═════════ -->
+<section class="sheet" id="p7" data-sec="STEP 2 · 가상 데이터로 목업">
+  <div class="stepbadge"><b>STEP 2</b><span>10분 · 2쪽</span></div>
+  <h2 class="h">목업 만들기 ①: 열 이름만 주고 가상 데이터로</h2>
   <p class="lede">이 단계에서는 실제 값 없이도 화면을 눈으로 확인할 수 있게 HTML 목업 한 장을 만듭니다.</p>
   <div class="vs">
     <div class="bad"><h4><svg class="ic"><use href="#i-x"/></svg>이렇게 말고</h4><p>엑셀 내용을 통째로 복사해 붙여넣기</p><span class="why">업체명·금액이 AI 서비스로 전송됩니다. 한 번 보내면 되돌릴 수 없습니다.</span></div>
@@ -56,6 +56,44 @@
       <p class="def"><b>용어:</b> 목업은 가짜 데이터로 먼저 만들어 보는 화면 시안입니다. 구현 전에 눈으로 보고 고치는 데 씁니다.</p>
       <div class="callout warn" style="margin-top:6px"><b class="t">"가상 샘플" 표시는 꼭 넣으세요</b>실제 값으로 오해해 보고서에 옮기는 사고를 막습니다.</div>
       <p class="def" style="margin-top:8px"><b>팁:</b> 가상 값이 이상하게 보이면 "평균 80점 안팎, 등급은 A 15% · B 50% · C 30% · D 5%처럼 분포를 정해 만들어 줘"라고 알려 주세요.</p>
+      <p class="def" style="margin-top:8px"><b>다음 쪽:</b> 원하는 배치가 있다면 스케치 한 장을 함께 주세요. 결과가 훨씬 빨리 맞춰집니다.</p>
     </div>
   </div>
+</section>
+
+<!-- ═════════ 8 STEP 2-② ═════════ -->
+<section class="sheet" id="p8" data-sec="STEP 2 · 스케치로 배치 전하기">
+  <div class="stepbadge"><b>STEP 2</b><span>10분 · 2쪽</span></div>
+  <h2 class="h">목업 만들기 ②: 원하는 배치는 스케치 한 장으로</h2>
+  <p class="lede">글만 주면 AI는 흔한 배치를 고릅니다. 배치는 사람이 그림으로 정합니다.</p>
+  <div class="vs">
+    <div class="bad"><h4><svg class="ic"><use href="#i-x"/></svg>이렇게 말고</h4><p>"깔끔한 대시보드로 만들어줘"</p><span class="why">내가 원한 배치가 아니면 처음부터 다시 하게 됩니다.</span></div>
+    <div class="good"><h4><svg class="ic"><use href="#i-ok"/></svg>이렇게</h4><p>배치를 그린 스케치 한 장 + "이 배치 그대로"</p><span class="why">AI가 배치를 고민하지 않아 결과가 빨리 맞춰집니다.</span></div>
+  </div>
+  <figure class="fig">
+    <div class="wire" role="img" aria-label="스케치 예시: 왼쪽 메뉴, 제목과 필터, 핵심 숫자, 추이와 영역별 차트, 한 줄 해석, 표">
+      <div class="ws"><span class="wl"><i class="no">1</i>왼쪽 메뉴</span><span>요약</span><span>분석</span><span>개별</span></div>
+      <div class="wm">
+        <div class="wh"><span><i class="no">2</i>제목 · 기준 연도</span><span><i class="no">3</i>필터 한 줄</span></div>
+        <div class="wk"><div class="big"><i class="no">4</i>핵심 숫자 1개 (크게)</div><div><i class="no">5</i>숫자</div><div><i class="no">5</i>숫자</div><div><i class="no">5</i>숫자</div></div>
+        <div class="wc"><div><i class="no">6</i>추이 (선)</div><div><i class="no">7</i>영역별 비교 (막대)</div></div>
+        <div class="wn"><i class="no">8</i>한 줄 해석 — "그래서 어떻다"</div>
+        <div class="wt"><i class="no">9</i>표 (10행씩)</div>
+      </div>
+    </div>
+    <figcaption>스케치는 이 정도면 충분합니다. 칸마다 번호와 이름표만 적고, 실제 업체명·숫자는 적지 않습니다.</figcaption>
+  </figure>
+  <p class="def"><b>스케치 만드는 법:</b> 종이에 그려 사진 찍기(1분) · PPT·그림판·미리캔버스에서 네모 상자 놓기(5분) · Figma 같은 디자인 도구(익숙한 분만).</p>
+  <div class="tb prompt">
+    <div class="tb-bar"><span class="tb-dots"><i></i><i></i><i></i></span><span class="tb-title"><svg class="ic"><use href="#i-chat"/></svg><span class="where">AI 대화창</span>에 붙여넣기 <span style="font-weight:400;color:#8794b8">(스케치 이미지와 함께)</span></span><button class="copy" type="button">복사</button></div>
+<pre>첨부한 스케치(배치도)를 그대로 따라 대시보드 목업을 만들어 주세요.
+- 배치는 스케치대로 합니다. 칸의 위치를 바꾸거나 스케치에 없는 칸을 넣지 마세요.
+- 이름표만 적힌 칸(핵심 숫자, 추이 차트 등)은 가상 데이터로 채우세요.
+- 이해가 안 되는 칸은 만들기 전에 질문 3개 이내로 물어보세요.
+열 이름: <span class="ph">&lt;열 이름만 나열&gt;</span>
+제약: 외부 CDN·웹폰트 금지, 화면에 "가상 샘플 데이터" 표시
+검증: 스케치의 칸 번호와 화면의 칸을 표로 대조해, 빠진 칸이 없는지 알려 주세요.</pre>
+  </div>
+  <div class="okl"><b>성공하면</b><span>스케치와 같은 자리에 같은 칸이 생기고, 칸 번호 대조표에 빠진 칸이 없습니다.</span></div>
+  <div class="callout info"><b class="t">스케치가 없으면 글로 이렇게 적습니다</b>"1 왼쪽 메뉴 2 제목 3 필터 4 핵심 숫자(크게) 5 작은 숫자 3개 6 추이 선 7 영역별 막대 8 한 줄 해석 9 표"처럼 번호를 붙이면 "4번 칸을 크게"처럼 고치기도 쉽습니다.</div>
 </section>

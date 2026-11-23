@@ -1,0 +1,61 @@
+<!-- ═════════ 5 STEP 1 ═════════ -->
+<section class="sheet" id="p5" data-sec="STEP 1 · 질문부터 정하기">
+  <div class="stepbadge"><b>STEP 1</b><span>5분</span></div>
+  <h2 class="h">질문부터 정하기</h2>
+  <p class="lede">이 단계에서는 "무엇을 보여 줄까"가 아니라 "이 화면으로 무엇을 결정할까"를 한 문장으로 적습니다.</p>
+  <div class="vs">
+    <div class="bad"><h4><svg class="ic"><use href="#i-x"/></svg>이렇게 말고</h4><p>"매출 대시보드 만들어줘"</p><span class="why">AI가 흔한 차트를 채워 넣습니다. 내 질문에 답하는 차트인지 알 수 없습니다.</span></div>
+    <div class="good"><h4><svg class="ic"><use href="#i-ok"/></svg>이렇게</h4><p>"팀장이 월요일 회의에서 '이번 달 매출이 지난달보다 좋아졌는지, 어느 제품이 문제인지'를 1분 안에 보게 하고 싶습니다."</p><span class="why">누가, 얼마나 오래, 무엇을 결정하는지가 들어 있습니다.</span></div>
+  </div>
+  <p>Quick Start의 프롬프트를 이미 썼다면 그 결과가 STEP 1입니다. 질문이 이미 있다면 아래 짧은 버전을 씁니다.</p>
+  <div class="tb prompt">
+    <div class="tb-bar"><span class="tb-dots"><i></i><i></i><i></i></span><span class="tb-title"><svg class="ic"><use href="#i-chat"/></svg><span class="where">AI 대화창</span>에 붙여넣기</span><button class="copy" type="button">복사</button></div>
+<pre>아래 질문에 답하는 대시보드의 KPI와 화면을 제안해 주세요.
+질문: <span class="ph">&lt;이 화면으로 결정하려는 것 한두 가지&gt;</span>
+볼 사람: <span class="ph">&lt;누가, 얼마나 오래 보는지&gt;</span>
+각 KPI에는 비교 기준(전년·목표·평균 중 하나)을 붙이고, 질문에 답하지 않는 차트는 넣지 마세요.
+표로 정리해 주세요: 질문 / KPI / 비교 기준 / 어느 화면에 놓을지</pre>
+  </div>
+  <div class="okl"><b>성공하면</b><span>질문 2~3개, 질문마다 "숫자 + 비교 기준"인 KPI, 화면 구성이 표로 나옵니다.</span></div>
+  <p class="def"><b>용어:</b> 비교 기준은 전년·목표·평균처럼 숫자가 좋은지 나쁜지 알려 주는 기준입니다. 비교 기준이 없는 숫자는 해석할 수 없습니다.</p>
+  <h3>화면은 세 가지면 충분합니다</h3>
+  <table class="tbl top">
+    <tr><th style="width:84px">화면</th><th style="width:200px">누가 · 얼마나</th><th>담는 것</th></tr>
+    <tr><td>요약</td><td>경영진·팀장 · 1분</td><td>결론 3줄, 핵심 숫자 4개, 추이</td></tr>
+    <tr><td>분석</td><td>담당자 · 10분</td><td>영역·항목별 비교, 필터, 기준선</td></tr>
+    <tr><td>개별</td><td>리뷰하는 사람 · 대상 1개</td><td>한 대상의 추이, 항목별 순위, 세부 내용</td></tr>
+  </table>
+  <div class="callout warn"><b class="t">질문은 2~3개까지만</b>질문이 3개를 넘으면 화면이 복잡해집니다. 2개로 시작하고, 질문에 답하지 않는 차트는 넣지 않습니다.</div>
+</section>
+
+<!-- ═════════ 6 STEP 2 ═════════ -->
+<section class="sheet" id="p6" data-sec="STEP 2 · 가상 데이터로 목업">
+  <div class="stepbadge"><b>STEP 2</b><span>10분</span></div>
+  <h2 class="h">열 이름만 주고 가상 데이터로 목업 만들기</h2>
+  <p class="lede">이 단계에서는 실제 값 없이도 화면을 눈으로 확인할 수 있게 HTML 목업 한 장을 만듭니다.</p>
+  <div class="vs">
+    <div class="bad"><h4><svg class="ic"><use href="#i-x"/></svg>이렇게 말고</h4><p>엑셀 내용을 통째로 복사해 붙여넣기</p><span class="why">업체명·금액이 AI 서비스로 전송됩니다. 한 번 보내면 되돌릴 수 없습니다.</span></div>
+    <div class="good"><h4><svg class="ic"><use href="#i-ok"/></svg>이렇게</h4><p>열 이름과 형식만 알려 주고 "값은 가상으로 만들어"라고 하기</p><span class="why">값이 없어도 화면 구성과 숫자 표시는 충분히 검토할 수 있습니다.</span></div>
+  </div>
+  <div class="tb prompt">
+    <div class="tb-bar"><span class="tb-dots"><i></i><i></i><i></i></span><span class="tb-title"><svg class="ic"><use href="#i-chat"/></svg><span class="where">AI 대화창</span>에 붙여넣기</span><button class="copy" type="button">복사</button></div>
+<pre>역할: 대시보드 화면 목업을 만드는 담당
+맥락: 아래 화면 정의서를 눈으로 보고 싶습니다. 실제 값은 모릅니다.
+입력:
+- 화면 정의서 = <span class="ph">&lt;STEP 1 결과 표 붙여넣기&gt;</span>
+- 열 이름 = <span class="ph">&lt;열 이름만. 예: 월, 제품, 매출, 목표, 전년 매출&gt;</span>
+작업: 가상 데이터를 만들어 단일 HTML 파일 하나로 목업을 만들어 주세요
+제약: 외부 CDN·웹폰트·외부 이미지 금지(인터넷 없이 열려야 함). 사람·업체 이름처럼 보이는 값은 만들지 말고 '제품 0001'처럼 번호로 쓰세요. 화면에 "가상 샘플 데이터" 표시를 넣으세요.
+출력: index.html 하나, 가상 데이터를 만든 규칙 한 줄
+검증: 브라우저에서 열었을 때 오류 없이 KPI가 모두 보여야 합니다. 안 되면 완료라고 하지 마세요.</pre>
+  </div>
+  <div class="okl"><b>성공하면</b><span><code>index.html</code>을 더블클릭하면 KPI·차트·표가 열리고, 화면에 "가상 샘플 데이터" 표시가 보입니다.</span></div>
+  <div class="row-fig">
+    <figure class="fig"><img src="{{img:shot_starter}}" alt="목업 예시 화면"><figcaption>STEP 2가 끝나면 이런 화면이 열립니다 (가상 샘플 · 클릭하면 확대)</figcaption></figure>
+    <div>
+      <p class="def"><b>용어:</b> 목업은 가짜 데이터로 먼저 만들어 보는 화면 시안입니다. 구현 전에 눈으로 보고 고치는 데 씁니다.</p>
+      <div class="callout warn" style="margin-top:6px"><b class="t">"가상 샘플" 표시는 꼭 넣으세요</b>실제 값으로 오해해 보고서에 옮기는 사고를 막습니다.</div>
+      <p class="def" style="margin-top:8px"><b>팁:</b> 가상 값이 이상하게 보이면 "평균 80점 안팎, 등급은 A 15% · B 50% · C 30% · D 5%처럼 분포를 정해 만들어 줘"라고 알려 주세요.</p>
+    </div>
+  </div>
+</section>

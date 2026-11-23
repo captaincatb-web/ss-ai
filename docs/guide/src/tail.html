@@ -1,0 +1,29 @@
+<div id="lb" role="dialog" aria-label="그림 확대"><img alt=""></div>
+<script>
+(function () {
+  'use strict';
+  var sheets = Array.prototype.slice.call(document.querySelectorAll('.sheet')), N = sheets.length;
+  var title = document.querySelector('.cover h1').innerText.replace(/\s+/g, ' ').trim();
+  /* 쪽 머리글 · 바닥글 (쪽 번호는 여기서 채운다 → 쪽을 늘려도 번호가 어긋나지 않음) */
+  sheets.forEach(function (s, i) {
+    if (i > 0) { var hd = document.createElement('div'); hd.className = 'sheet-hd'; hd.innerHTML = '<span>AI 활용 가이드 · 대시보드</span><span>' + (s.getAttribute('data-sec') || '') + '</span>'; s.insertBefore(hd, s.firstChild); }
+    var ft = document.createElement('div'); ft.className = 'sheet-ft'; ft.innerHTML = '<span>' + title + '</span><span>' + (i + 1) + ' / ' + N + '</span>'; s.appendChild(ft);
+  });
+  /* 복사 버튼 */
+  function fallback(text, done) { var t = document.createElement('textarea'); t.value = text; t.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e) { /* 복사 불가 환경은 무시 */ } t.remove(); done(); }
+  Array.prototype.forEach.call(document.querySelectorAll('.tb'), function (box) {
+    var btn = box.querySelector('.copy'), pre = box.querySelector('pre'); if (!btn || !pre) return;
+    btn.addEventListener('click', function () {
+      var text = pre.textContent.replace(/^\n/, '').replace(/\s+$/, ''), done = function () { var old = btn.textContent; btn.textContent = '복사됨'; setTimeout(function () { btn.textContent = old; }, 1300); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); }); else fallback(text, done);
+    });
+  });
+  /* 그림 확대 */
+  var lb = document.getElementById('lb'), lbImg = lb.querySelector('img');
+  Array.prototype.forEach.call(document.querySelectorAll('.fig img'), function (img) { img.addEventListener('click', function () { lbImg.src = img.src; lb.classList.add('open'); }); });
+  lb.addEventListener('click', function () { lb.classList.remove('open'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('open'); });
+})();
+</script>
+</body>
+</html>

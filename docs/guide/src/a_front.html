@@ -1,0 +1,109 @@
+<!-- ═════════ 1 표지 ═════════ -->
+<section class="sheet cover" id="p1" data-sec="">
+  <div class="brandline"><span class="brand">AI 활용 가이드</span><span class="cat">데이터 · 대시보드</span></div>
+  <h1>AI로 만든 대시보드,<br>처음부터 다시 만들지 않으려면<br>알아야 할 8가지</h1>
+  <p class="sub">질문 → 목업 → 디자인 → 규칙 → 지시서 → 검증 → 공유 순서로, 내가 정할 것과 AI에게 맡길 것을 나눕니다.</p>
+  <p class="meta">읽는 데 17분 · 스텝 8개 · 섹션 16개 · 2026-11-23 작성 · 작성 [이름 · 부서]</p>
+  <div class="toc">
+    <h3>이 가이드의 순서</h3>
+    <ol>
+      <li><a href="#p2"><em>Quick Start</em><span>내 대시보드 설계서를 AI와 한 장으로</span><i>5분</i></a></li>
+      <li><a href="#p5"><em>1</em><span>질문부터 정하기</span><i>5분</i></a></li>
+      <li><a href="#p6"><em>2</em><span>열 이름만 주고 가상 데이터로 목업 만들기</span><i>10분</i></a></li>
+      <li><a href="#p7"><em>3</em><span>보기 좋게 만들기 — 디자인 기준을 AI에게 주기</span><i>15분</i></a></li>
+      <li><a href="#p9"><em>4</em><span>마음에 안 들면 구체적으로 고치기</span><i>10분</i></a></li>
+      <li><a href="#p10"><em>5</em><span>계산 규칙을 숫자로 못 박기</span><i>10분</i></a></li>
+      <li><a href="#p11"><em>6</em><span>지시서를 쓰고 AI 코딩 도구에 맡기기</span><i>20분</i></a></li>
+      <li><a href="#p13"><em>7</em><span>정답값으로 검증하기</span><i>10분</i></a></li>
+      <li><a href="#p14"><em>8</em><span>안전하게 공유하기</span><i>5분</i></a></li>
+      <li class="more"><a href="#p15"><em>그 밖에</em><span>상황별로 고르기 · 끝났는지 확인 · 참고 자료</span><i></i></a></li>
+    </ol>
+  </div>
+  <p class="coverfoot">웹에서 보면 복사 버튼과 그림 확대를 쓸 수 있습니다. 인쇄하면 쪽마다 A4 한 장으로 나옵니다.</p>
+</section>
+
+<!-- ═════════ 2 Quick Start ═════════ -->
+<section class="sheet" id="p2" data-sec="Quick Start">
+  <div class="stepbadge"><b>QUICK START</b><span>5분</span></div>
+  <h2 class="h">AI에게 "대시보드 만들어줘"라고 하기 전에</h2>
+  <p class="lede">그럴듯한데 내 업무와는 안 맞는 화면이 나옵니다. 고쳐 달라고 하면 다른 곳이 바뀌고, 결국 처음부터 다시 하게 됩니다.</p>
+  <p>문제는 AI가 아니라 <b>순서</b>입니다. 질문·기준·규칙은 사람이 정하고, 만드는 일은 AI가 하고, 맞는지는 다시 사람이 숫자로 확인합니다. 이 가이드는 그 순서를 8스텝으로 정리했습니다.</p>
+  <div class="flow">
+    <div class="h"><b>STEP 1</b>질문<i></i></div><div class="m"><b>STEP 2</b>목업<i></i></div><div class="m"><b>STEP 3</b>디자인<i></i></div><div class="h"><b>STEP 4</b>고치기<i></i></div>
+    <div class="h"><b>STEP 5</b>규칙<i></i></div><div class="a"><b>STEP 6</b>구현<i></i></div><div class="h"><b>STEP 7</b>검증<i></i></div><div class="h"><b>STEP 8</b>공유<i></i></div>
+  </div>
+  <div class="legend"><span><i style="background:var(--human)"></i>사람이 정하고 확인</span><span><i style="background:var(--ai)"></i>AI가 만듦</span><span><i style="background:linear-gradient(90deg,var(--human) 50%,var(--ai) 50%)"></i>함께 반복</span></div>
+  <div class="callout info"><b class="t"><svg class="ic"><use href="#i-bolt"/></svg> 복사해서 바로 시작하는 프롬프트: 내 대시보드 설계서를 AI와 한 장으로 만들기</b>AI 대화창을 열고 첫 메시지로 붙여넣으세요. 꺾쇠(&lt; &gt;)로 표시된 세 곳만 내 상황으로 바꾸면 됩니다.</div>
+  <div class="tb prompt">
+    <div class="tb-bar"><span class="tb-dots"><i></i><i></i><i></i></span><span class="tb-title"><svg class="ic"><use href="#i-chat"/></svg><span class="where">AI 대화창</span>에 붙여넣기</span><button class="copy" type="button">복사</button></div>
+<pre>역할: 대시보드 기획을 도와주는 담당. 코드는 아직 쓰지 않습니다.
+맥락: 저는 개발 경험이 없는 업무 담당자입니다. 엑셀 데이터를 AI와 함께 대시보드로 만들려고 합니다.
+입력:
+- 내 업무 = <span class="ph">&lt;어떤 업무의 어떤 데이터를 보고 싶은지 한 줄. 예: 월별 매출·재고&gt;</span>
+- 볼 사람 = <span class="ph">&lt;누가 얼마나 오래 보는지. 예: 팀장이 월요일 회의에서 1분&gt;</span>
+- 엑셀 열 이름 = <span class="ph">&lt;열 이름만 나열. 값(업체명·금액 등)은 절대 적지 않습니다&gt;</span>
+작업:
+① 한 번에 질문 3개씩만 하면서, 이 대시보드가 답해야 할 질문을 3개로 좁혀 주세요
+② 질문마다 KPI(숫자)와 비교 기준(전년·목표·평균 중 하나)을 제안해 주세요
+③ 화면을 요약 / 분석 / 개별 중 필요한 것만 골라 화면 정의서 표로 만들어 주세요
+④ 결과 숫자가 달라질 수 있는 모호한 규칙(등급 구간, 빈칸 처리, 증감 표시 등)을 "확인할 질문"으로 따로 뽑아 주세요
+⑤ 당신이 한 가정은 "가정 목록" 표로 적어 주세요
+제약: 실제 데이터 값을 요구하지 마세요. 코드는 쓰지 마세요. ①이 끝나면 멈추고 제 답을 기다리세요.
+출력: 질문 3개 / KPI 표 / 화면 정의서 표 / 확인할 질문 목록 / 가정 목록
+검증: 마지막에 "이 질문에 답하지 않는 차트는 없는가"를 스스로 점검해 한 줄로 알려 주세요.</pre>
+  </div>
+  <div class="okl"><b>성공하면</b><span>질문 3개, KPI 표, 화면 정의서, 확인할 질문, 가정 목록이 나옵니다. 이 결과가 STEP 1~5의 재료가 됩니다.</span></div>
+</section>
+
+<!-- ═════════ 3 시작하기 전에 ═════════ -->
+<section class="sheet" id="p3" data-sec="시작하기 전에">
+  <div class="stepbadge"><b>시작하기 전에</b><span>2분</span></div>
+  <h2 class="h">프롬프트는 두 곳에서 씁니다</h2>
+  <p class="lede">프롬프트 위에 '붙여넣을 곳'이 표시되어 있습니다. 같은 AI라도 하는 일이 다릅니다.</p>
+  <div class="row2">
+    <div class="card"><h4><svg class="ic" style="color:var(--accent)"><use href="#i-chat"/></svg>AI 대화창</h4><p class="sub" style="margin:0">질문 정리, 목업, 규칙, 지시서 초안을 만드는 곳입니다. 예: Claude. 내 폴더의 파일을 직접 고치지는 않습니다.</p></div>
+    <div class="card"><h4><svg class="ic" style="color:var(--accent)"><use href="#i-term"/></svg>AI 코딩 도구</h4><p class="sub" style="margin:0">내 폴더에서 파일을 만들고 실행하며 실제 대시보드를 구현하는 곳입니다. 예: 사내 opencode, Claude Code.</p></div>
+  </div>
+  <h3>이 가이드에 나오는 용어</h3>
+  <p class="def"><b>대시보드:</b> 핵심 숫자와 차트·표를 한 화면에 모아 보여 주는 화면입니다.</p>
+  <p class="def"><b>KPI:</b> 대시보드의 핵심 숫자입니다. '평균 점수 + 전년 대비'처럼 비교 기준을 붙입니다.</p>
+  <p class="def"><b>목업:</b> 가짜 데이터로 먼저 만들어 보는 화면 시안입니다.</p>
+  <p class="def"><b>지시서:</b> AI 코딩 도구에게 줄 작업 설명서입니다. 규칙·단계·완료 기준이 들어갑니다.</p>
+  <p class="def"><b>정답값:</b> 가상 데이터로 미리 정해 둔 기대 숫자입니다. 만든 결과가 맞는지 대조하는 기준입니다.</p>
+  <h3>한눈에 보는 정보</h3>
+  <dl class="prof">
+    <dt>한 줄 정의</dt><dd>AI로 대시보드 만들기는 <b>사람이 정하고, AI가 만들고, 사람이 숫자로 확인</b>하는 일입니다.</dd>
+    <dt>필요한 것</dt><dd>AI 대화창, AI 코딩 도구, 브라우저, 내 엑셀. 별도 프로그램 설치는 거의 없습니다.</dd>
+    <dt>필요한 지식</dt><dd>없음. 엑셀을 열 수 있고 "이 숫자가 맞나?"를 확인할 수 있으면 충분합니다.</dd>
+    <dt>비용</dt><dd>사내 도구를 쓰면 추가 결제가 없습니다. 외부 AI 서비스는 사내 정책을 먼저 확인하세요.</dd>
+    <dt>잘 맞는 경우</dt><dd>엑셀 결과를 읽고 보는 화면. 갱신이 일·주·월 단위이고 데이터가 수천~수만 행.</dd>
+    <dt>안 맞는 경우</dt><dd>화면에서 데이터를 입력·수정해야 하거나 실시간 갱신, 사람마다 보이는 데이터가 다른 경우 → 개발 담당자와 상의하세요.</dd>
+  </dl>
+</section>
+
+<!-- ═════════ 4 시작 전 안전망 ═════════ -->
+<section class="sheet" id="p4" data-sec="시작 전 안전망">
+  <div class="stepbadge"><b>시작 전 안전망</b><span>3분</span></div>
+  <h2 class="h">AI에게 주지 않을 것, 남겨 둘 것</h2>
+  <p class="lede">일을 맡기기 전에 정해 두면 되돌릴 일이 없습니다. 특히 ①은 한 번 보내면 되돌릴 수 없습니다.</p>
+  <h3>① AI에게 줄 것과 주지 않을 것</h3>
+  <table class="tbl top">
+    <tr><th style="width:50%"><svg class="ic" style="color:var(--ok)"><use href="#i-ok"/></svg> 줄 것</th><th><svg class="ic" style="color:var(--bad)"><use href="#i-x"/></svg> 주지 않을 것</th></tr>
+    <tr><td style="font-weight:400">열 이름 · 형식(숫자·날짜) · 규칙(등급 구간 등) · 가상 데이터</td><td style="font-weight:400">업체명·금액·개인정보 · 사내 문서 원문 · 비밀번호·키·토큰</td></tr>
+  </table>
+  <p class="def">열 이름도 사내 용어일 수 있습니다. 외부 AI에는 '평가점수'처럼 <b>일반화한 이름</b>을, 실제 이름은 사내 AI 도구에만 알려 주세요.</p>
+  <h3>② 원본은 복사본으로</h3>
+  <p>엑셀 원본은 건드리지 않고 복사본으로 작업합니다. AI가 만든 도구가 원본을 덮어쓰지 못하게 "원본은 읽기만 한다"를 지시서에 적어 둡니다(STEP 6).</p>
+  <h3>③ 저장 지점 만들기</h3>
+  <p>마음에 드는 버전마다 폴더를 통째로 복사해 이름을 붙이세요(<code>대시보드_v1</code>, <code>v2</code>…). git을 쓴다면 아래 3줄로 한 번 저장합니다.</p>
+  <div class="tb cmd">
+    <div class="tb-bar"><span class="tb-dots"><i></i><i></i><i></i></span><span class="tb-title"><svg class="ic"><use href="#i-term"/></svg>터미널에서 실행</span><button class="copy" type="button">복사</button></div>
+<pre>git init
+git add .
+git commit -m "v1 저장"</pre>
+  </div>
+  <div class="okl"><b>성공하면</b><span><code>git status</code>를 쳤을 때 <code>nothing to commit, working tree clean</code>이 보입니다.</span></div>
+  <h3>④ 사내 규칙 확인</h3>
+  <p>외부 AI 서비스에 올려도 되는 정보의 범위, 저장소(사내 GitHub) 사용 규칙을 먼저 확인하세요. <b style="color:var(--warn)">[사내 AI 사용 지침 링크 · 담당자]</b></p>
+  <div class="callout bad"><b class="t"><svg class="ic"><use href="#i-warn"/></svg> 이미 데이터를 붙여넣었다면</b>멈추고 담당자에게 알리세요. 숨기거나 지우기 전에 알리는 편이 안전합니다.</div>
+</section>
